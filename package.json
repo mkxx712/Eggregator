@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "node -r dotenv/config ./scripts/db.js"
   },
   "dependencies": {
     "@nextui-org/button": "^2.0.26",
@@ -28,11 +29,15 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@react-stately/data": "^3.11.2",
     "@tanstack/react-table": "^8.13.2",
+    "@vercel/postgres": "^0.7.2",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.1",
     "date-fns": "^3.3.1",
+    "dotenv": "^16.4.5",
     "framer-motion": "^11.0.6",
+    "i": "^0.3.7",
     "install": "^0.13.0",
     "lucide-react": "^0.343.0",
     "mongodb": "6.3",
@@ -46,7 +51,8 @@
     "react-wrap-balancer": "^1.1.0",
     "recharts": "^2.12.1",
     "tailwind-merge": "^2.2.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "vercel": "^33.5.3"
   },
   "devDependencies": {
     "@types/node": "^20",
