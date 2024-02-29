@@ -10,12 +10,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { News } from "@/components/news";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Overview } from "@/components/overview";
 import { RecentSales } from "@/components/recent-transactions";
 import EXSwitcher from "@/components/switcher";
 import { UserNav } from "@/components/user-nav";
 import { Gas } from "@/components/gas";
+import { Kchart } from "@/components/kchart";
 
 export const metadata: Metadata = {
   title: "Eggregator",
@@ -138,10 +148,24 @@ export default function DashboardPage() {
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                 <Card className="col-span-5">
                   <CardHeader>
+                    <div className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle>Chart</CardTitle>
+                    <Select>
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select an asset" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Assets</SelectLabel>
+                          <SelectItem value="BTC">BTC</SelectItem>
+                          <SelectItem value="ETH">ETH</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                    </div>
                   </CardHeader>
                   <CardContent className="pl-2">
-                    <Overview />
+                    <Kchart />
                   </CardContent>
                 </Card>
                 <Card className="col-span-2">
