@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "seed": "node -r dotenv/config ./scripts/db.js"
+    "lint": "next lint"
   },
   "dependencies": {
     "@nextui-org/button": "^2.0.26",
@@ -30,12 +29,16 @@
     "@react-stately/data": "^3.11.2",
     "@tanstack/react-table": "^8.13.2",
     "@vercel/postgres": "^0.7.2",
+    "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.1",
+    "crypto-js": "^4.2.0",
+    "crypto.js": "^3.2.0",
     "date-fns": "^3.3.1",
     "dotenv": "^16.4.5",
+    "dotenv-expand": "^11.0.6",
     "framer-motion": "^11.0.6",
     "i": "^0.3.7",
     "install": "^0.13.0",

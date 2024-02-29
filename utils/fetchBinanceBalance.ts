@@ -2,11 +2,9 @@
 import axios from 'axios';
 import * as CryptoJS from 'crypto-js';
 
-// Your Binance API Key and Secret Key
 const API_KEY = process.env.BINANCE_API;
 const SECRET_KEY = process.env.BINANCE_API_SECRET;
 
-// Function to fetch wallet balance
 export async function fetchWalletBalance() {
     const baseUrl = 'https://api.binance.com';
     const endPoint = '/api/v3/account';
