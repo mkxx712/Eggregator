@@ -208,7 +208,7 @@ export const columns: ColumnDef<Assets>[] = [
   },
 ]
 
-export function Portfolio() {
+export function Portfolio( { portfolio } : { portfolio : any }) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

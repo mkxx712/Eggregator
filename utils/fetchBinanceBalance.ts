@@ -10,7 +10,7 @@ export async function fetchWalletBalance() {
     const endPoint = '/api/v3/account';
     const dataQueryString = 'recvWindow=20000&timestamp=' + Date.now();
 
-    const signature = CryptoJS.HmacSHA256(dataQueryString, SECRET_KEY).toString(CryptoJS.enc.Hex);
+    const signature = CryptoJS.HmacSHA256(dataQueryString, SECRET_KEY!).toString(CryptoJS.enc.Hex);
 
     const url = baseUrl + endPoint + '?' + dataQueryString + '&signature=' + signature;
 
