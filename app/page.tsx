@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+
 import { Metadata } from "next";
 import Image from "next/image";
 
@@ -27,13 +29,17 @@ import { UserNav } from "@/components/user-nav";
 import { Gas } from "@/components/gas";
 import { Kchart } from "@/components/kchart";
 import { Portfolio } from "@/components/portfolio";
+import Fng from "@/components/fng";
+import {fetchWalletBalance} from "@/utils/fetchBinanceBalance"
 
 export const metadata: Metadata = {
   title: "Eggregator",
   description: "See your crypto in one place.",
 };
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const portfolio = await fetchWalletBalance();
+  console.log(portfolio);
   return (
     <>
       <div className="flex-col md:flex">
@@ -106,10 +112,7 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
-                    <p className="text-xs text-muted-foreground">
-                      +201 since last hour
-                    </p>
+                    <Fng />
                   </CardContent>
                 </Card>
               </div>
@@ -188,7 +191,7 @@ export default function DashboardPage() {
                     <CardTitle>Current Portfolio</CardTitle>
                   </CardHeader>
                   <CardContent>
-                  < Portfolio />
+                  < Portfolio portfolio={portfolio}/>
                   </CardContent>
                 </Card>
               </div>

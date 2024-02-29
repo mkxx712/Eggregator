@@ -1,9 +1,10 @@
+"use server";
 import axios from 'axios';
 import * as CryptoJS from 'crypto-js';
 
 // Your Binance API Key and Secret Key
-const API_KEY = 'fhOiQZ6CbQUd0uRHdVLARXrsuYf3CWlVNiTwSqmw7P5b0Chny1cglAtRxZUmPzRE';
-const SECRET_KEY = 'F6XqrWlokclSqyGZiWXo7kromNEt8HjmWevL5uXWcIfNqSVFoynwSLtZVm6vHteS';
+const API_KEY = process.env.BINANCE_API;
+const SECRET_KEY = process.env.BINANCE_API_SECRET;
 
 // Function to fetch wallet balance
 export async function fetchWalletBalance() {
