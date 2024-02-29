@@ -27,6 +27,7 @@ import { UserNav } from "@/components/user-nav";
 import { Gas } from "@/components/gas";
 import { Kchart } from "@/components/kchart";
 import { Portfolio } from "@/components/portfolio";
+import Fng from "@/components/fng";
 
 export const metadata: Metadata = {
   title: "Eggregator",
@@ -106,10 +107,7 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
-                    <p className="text-xs text-muted-foreground">
-                      +201 since last hour
-                    </p>
+                    <Fng />
                   </CardContent>
                 </Card>
               </div>
