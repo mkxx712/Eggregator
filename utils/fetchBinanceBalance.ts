@@ -2,16 +2,14 @@
 import axios from 'axios';
 import * as CryptoJS from 'crypto-js';
 
-// Your Binance API Key and Secret Key
 const API_KEY = process.env.BINANCE_API;
 const SECRET_KEY = process.env.BINANCE_API_SECRET;
 
-// Function to fetch wallet balance
 export async function fetchWalletBalance() {
     const baseUrl = 'https://api.binance.com';
     const endPoint = '/api/v3/account';
     const dataQueryString = 'recvWindow=20000&timestamp=' + Date.now();
-    const signature = CryptoJS.HmacSHA256(dataQueryString, "F6XqrWlokclSqyGZiWXo7kromNEt8HjmWevL5uXWcIfNqSVFoynwSLtZVm6vHteS").toString(CryptoJS.enc.Hex);
+    const signature = CryptoJS.HmacSHA256(dataQueryString, SECRET_KEY!).toString(CryptoJS.enc.Hex);
 
     const url = baseUrl + endPoint + '?' + dataQueryString + '&signature=' + signature;
 
