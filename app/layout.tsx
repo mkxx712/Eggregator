@@ -5,8 +5,6 @@ import './globals.css';
 const inter = Inter({ subsets: ["latin"] });
 
 import { cn } from "@/lib/utils"
-import { Announcement } from "@/components/announcement"
-import { ExamplesNav } from "@/components/examples-nav"
 import {
   PageActions,
   PageHeader,
