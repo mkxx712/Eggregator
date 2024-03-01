@@ -174,12 +174,14 @@ export const columns: ColumnDef<Assets>[] = [
 ]
 
 export function Portfolio(props:{portfolio:any}) {
-  const data = props.portfolio.map((e:any)=> {
+  const data = props.portfolio
+  .filter((e: any) => Number(e.free) + Number(e.locked) > 0) // First, filter entries with amount > 0
+  .map((e: any) => { // Then, map the filtered entries to the desired structure
     return {
-      asset:e.asset,
-      amount: Number(e.free)+Number(e.locked),
-      at: "Binance" // Pending logic to change to corresponding exchanges
-    }
+      asset: e.asset,
+      amount: Number(e.free) + Number(e.locked),
+      at: "Binance" // You can add your logic for different exchanges here
+    };
   });
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
