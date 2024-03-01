@@ -25,4 +25,4 @@ export async function fetchWalletBalance() {
     } catch (error) {
         console.error('Error fetching wallet balance:', error);
     }
-}
+}2
