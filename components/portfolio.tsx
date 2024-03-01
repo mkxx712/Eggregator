@@ -125,7 +125,7 @@ export const columns: ColumnDef<Assets>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("at")}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("at")}</div>,
   },
   {
     id: "actions",
@@ -175,7 +175,7 @@ export function Portfolio(props:{portfolio:any, prices:any}) {
     amount: Number(item.free) + Number(item.locked),
     price: props.prices[index], // Use the corresponding fetched price
     total: (Number(item.free) + Number(item.locked)) * props.prices[index],
-    at: "Binance" // This is static in your example, adjust as needed
+    at: "Binance.US" // This is static in your example, adjust as needed
   }));
 
   const [sorting, setSorting] = React.useState<SortingState>([])
