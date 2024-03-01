@@ -6,7 +6,7 @@ const API_KEY = process.env.BINANCE_API;
 const SECRET_KEY = process.env.BINANCE_API_SECRET;
 
 export async function fetchWalletBalance() {
-    const baseUrl = 'https://api.binance.com';
+    const baseUrl = 'https://api.binance.us'; //'https://api.binance.com'
     const endPoint = '/api/v3/account';
     const dataQueryString = 'recvWindow=20000&timestamp=' + Date.now();
     const signature = CryptoJS.HmacSHA256(dataQueryString, SECRET_KEY!).toString(CryptoJS.enc.Hex);
