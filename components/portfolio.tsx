@@ -40,48 +40,13 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-const data: Assets[] = [
-  {
-    asset: "BTC",
-    at: "Ethereum",
-    amount: 1,
-    price: 60000,
-    total: 60000,
-    pl: 30,
-  },
-  {
-    asset: "BTC",
-    at: "Binance",
-    amount: 1,
-    price: 60000,
-    total: 60000,
-    pl: 20,
-  },
-  {
-    asset: "ETH",
-    at: "Coinbase",
-    amount: 1,
-    price: 3000,
-    total: 3000,
-    pl: 20,
-  },
-  {
-    asset: "EOS",
-    at: "OKX",
-    amount: 100,
-    price: 2,
-    total: 200,
-    pl: 300,
-  }
-]
 
 export type Assets = {
   asset: string
-  at: string
   amount: number
   price: number
   total: number
-  pl: number
+  at: string
 }
 
 export const columns: ColumnDef<Assets>[] = [
@@ -99,21 +64,6 @@ export const columns: ColumnDef<Assets>[] = [
       )
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("asset")}</div>,
-  },
-  {
-    accessorKey: "at",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          At
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("at")}</div>,
   },
   {
     accessorKey: "amount",
@@ -160,20 +110,35 @@ export const columns: ColumnDef<Assets>[] = [
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("total")}</div>,
   },
+  // {
+  //   accessorKey: "pl",
+  //   header: ({ column }) => {
+  //     return (
+  //       <Button
+  //         variant="ghost"
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //       >
+  //         P&L
+  //         <CaretSortIcon className="ml-2 h-4 w-4" />
+  //       </Button>
+  //     )
+  //   },
+  //   cell: ({ row }) => <div className="lowercase">{row.getValue("pl")}</div>,
+  // },
   {
-    accessorKey: "pl",
+    accessorKey: "at",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          P&L
+          At
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("pl")}</div>,
+    cell: ({ row }) => <div className="lowercase">{row.getValue("at")}</div>,
   },
   {
     id: "actions",
@@ -208,7 +173,16 @@ export const columns: ColumnDef<Assets>[] = [
   },
 ]
 
-export function Portfolio( { portfolio } : { portfolio : any }) {
+export function Portfolio(props:{portfolio:any}) {
+  const data = props.portfolio
+  .filter((e: any) => Number(e.free) + Number(e.locked) > 0) // First, filter entries with amount > 0
+  .map((e: any) => { // Then, map the filtered entries to the desired structure
+    return {
+      asset: e.asset,
+      amount: Number(e.free) + Number(e.locked),
+      at: "Binance" // You can add your logic for different exchanges here
+    };
+  });
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
