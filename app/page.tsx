@@ -30,7 +30,15 @@ import { Gas } from "@/components/gas";
 import { Kchart } from "@/components/kchart";
 import { Portfolio } from "@/components/portfolio";
 import Fng from "@/components/fng";
-import {fetchWalletBalance} from "@/utils/fetchBinanceBalance"
+import {fetchWalletBalance} from "@/utils/fetchBinanceBalance";
+import {fetchCoinPriceByName} from "@/utils/fetchCmkPrice";
+import { Asset } from 'next/font/google';
+
+interface AssetItem {
+  asset: string;
+  free: string;
+  locked: string;
+}
 
 export const metadata: Metadata = {
   title: "Eggregator",
@@ -39,7 +47,13 @@ export const metadata: Metadata = {
 
 export default async function DashboardPage() {
   const portfolio = await fetchWalletBalance();
-  console.log(portfolio);
+
+  // Fetch prices for all filtered assets in parallel
+  const pricePromises = portfolio
+  .filter( (item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
+  .map((item: AssetItem) => fetchCoinPriceByName(item.asset));
+  const prices = await Promise.all(pricePromises);
+
   return (
     <>
       <div className="flex-col md:flex">
@@ -191,7 +205,7 @@ export default async function DashboardPage() {
                     <CardTitle>Current Portfolio</CardTitle>
                   </CardHeader>
                   <CardContent>
-                  < Portfolio portfolio={portfolio}/>
+                  <Portfolio portfolio={portfolio} prices={prices} />
                   </CardContent>
                 </Card>
               </div>

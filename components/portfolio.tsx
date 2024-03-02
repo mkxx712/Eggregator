@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import * as React from "react";
 import {
   CaretSortIcon,
   ChevronDownIcon,
@@ -40,6 +40,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import {fetchCoinPriceByName} from "@/utils/fetchCmkPrice";
+import { propagateServerField } from "next/dist/server/lib/render-server";
 
 export type Assets = {
   asset: string
@@ -63,7 +65,7 @@ export const columns: ColumnDef<Assets>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("asset")}</div>,
+    cell: ({ row }) => <div className="uppercase">{row.getValue("asset")}</div>,
   },
   {
     accessorKey: "amount",
@@ -110,21 +112,6 @@ export const columns: ColumnDef<Assets>[] = [
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("total")}</div>,
   },
-  // {
-  //   accessorKey: "pl",
-  //   header: ({ column }) => {
-  //     return (
-  //       <Button
-  //         variant="ghost"
-  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-  //       >
-  //         P&L
-  //         <CaretSortIcon className="ml-2 h-4 w-4" />
-  //       </Button>
-  //     )
-  //   },
-  //   cell: ({ row }) => <div className="lowercase">{row.getValue("pl")}</div>,
-  // },
   {
     accessorKey: "at",
     header: ({ column }) => {
@@ -138,7 +125,7 @@ export const columns: ColumnDef<Assets>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("at")}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("at")}</div>,
   },
   {
     id: "actions",
@@ -173,16 +160,24 @@ export const columns: ColumnDef<Assets>[] = [
   },
 ]
 
-export function Portfolio(props:{portfolio:any}) {
+interface AssetItem {
+  asset: string;
+  free: string;
+  locked: string;
+}
+
+export function Portfolio(props:{portfolio:any, prices:any}) {
+
   const data = props.portfolio
-  .filter((e: any) => Number(e.free) + Number(e.locked) > 0) // First, filter entries with amount > 0
-  .map((e: any) => { // Then, map the filtered entries to the desired structure
-    return {
-      asset: e.asset,
-      amount: Number(e.free) + Number(e.locked),
-      at: "Binance" // You can add your logic for different exchanges here
-    };
-  });
+  .filter( (item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
+  .map((item: AssetItem, index: number) => ({
+    asset: item.asset,
+    amount: Number(item.free) + Number(item.locked),
+    price: props.prices[index], // Use the corresponding fetched price
+    total: (Number(item.free) + Number(item.locked)) * props.prices[index],
+    at: "Binance.US" // This is static in your example, adjust as needed
+  }));
+
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
