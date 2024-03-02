@@ -15,7 +15,7 @@ import {
           <div className="ml-4 space-y-1">
             <p className="text-sm font-medium leading-none">BINANCE.US</p>
             <p className="text-sm text-muted-foreground">
-              BTC -> USDC
+              BTC - USDC
             </p>
           </div>
           <div className="ml-auto font-medium">+$3,234.13</div>
@@ -27,7 +27,7 @@ import {
           </Avatar>
           <div className="ml-4 space-y-1">
             <p className="text-sm font-medium leading-none">COINBASE</p>
-            <p className="text-sm text-muted-foreground">ANA -> WTH</p>
+            <p className="text-sm text-muted-foreground">ANA - WTH</p>
           </div>
           <div className="ml-auto font-medium">+$20.02</div>
         </div>
@@ -39,7 +39,7 @@ import {
           <div className="ml-4 space-y-1">
             <p className="text-sm font-medium leading-none">Ethereum</p>
             <p className="text-sm text-muted-foreground">
-              ETH -> UNI
+              ETH - UNI
             </p>
           </div>
           <div className="ml-auto font-medium">-$303.35</div>
@@ -51,7 +51,7 @@ import {
           </Avatar>
           <div className="ml-4 space-y-1">
             <p className="text-sm font-medium leading-none">POLYGON</p>
-            <p className="text-sm text-muted-foreground">WETH -> USDT</p>
+            <p className="text-sm text-muted-foreground">WETH - USDT</p>
           </div>
           <div className="ml-auto font-medium">+$99.14</div>
         </div>
@@ -61,7 +61,7 @@ import {
           </Avatar>
           <div className="ml-4 space-y-1">
             <p className="text-sm font-medium leading-none">COINBASE</p>
-            <p className="text-sm text-muted-foreground">COIN -> ANA</p>
+            <p className="text-sm text-muted-foreground">COIN - ANA</p>
           </div>
           <div className="ml-auto font-medium">+$39.32</div>
         </div>
