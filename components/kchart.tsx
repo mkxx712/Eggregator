@@ -48,6 +48,7 @@ const KChart: React.FC<KChartProps> = ({ selectedAsset }) => {
       wickUpColor: 'rgba(0, 150, 136, 1)', // Same bright green for the wick of up candles
     });    
     
+    
     fetchAndSetData(selectedAsset, (data) => {
       candleSeries.setData(data);
     }).catch((error) => console.error("Error setting data: ", error));

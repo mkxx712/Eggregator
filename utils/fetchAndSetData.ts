@@ -1,8 +1,9 @@
 // utils/fetchAndSetData.ts
 import axios from 'axios';
+import { Time } from 'lightweight-charts';
 
 interface KlineData {
-  time: number;
+  time: Time;
   open: number;
   high: number;
   low: number;
