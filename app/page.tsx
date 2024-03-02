@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import { Metadata } from "next";
 import Image from "next/image";
@@ -27,12 +27,14 @@ import { RecentSales } from "@/components/recent-transactions";
 import EXSwitcher from "@/components/switcher";
 import { UserNav } from "@/components/user-nav";
 import { Gas } from "@/components/gas";
-import { Kchart } from "@/components/kchart";
+import Kchart from "@/components/kchart";
 import { Portfolio } from "@/components/portfolio";
 import Fng from "@/components/fng";
 import {fetchWalletBalance} from "@/utils/fetchBinanceBalance";
 import {fetchCoinPriceByName} from "@/utils/fetchCmkPrice";
 import { Asset } from 'next/font/google';
+import { fetchAndSetData } from '@/utils/fetchAndSetData';
+import { createChart } from 'lightweight-charts';
 
 interface AssetItem {
   asset: string;
@@ -54,14 +56,21 @@ export default async function DashboardPage() {
   .map((item: AssetItem) => fetchCoinPriceByName(item.asset));
   const prices = await Promise.all(pricePromises);
 
-  return (
+  const selectedAsset = portfolio
+  .filter( (item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
+  .map((item: AssetItem) => item.asset);
+
+  return (  
     <>
       <div className="flex-col md:flex">
         <div className="flex-1 space-y-4 p-8 pt-6">
-          <div className="flex items-center justify-between space-y-2">
-            <h2 className="text-3xl font-bold tracking-normal">Eggregator</h2>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2"> 
+                <img src="https://i.imgur.com/vtjp3tz.png" alt="Logo" className="h-8 w-8"/>
+                <h2 className="text-3xl font-bold tracking-normal">Eggregator</h2>
+            </div>
             <div className="flex items-center space-x-2">
-              <EXSwitcher />
+                <EXSwitcher />
             </div>
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
@@ -176,15 +185,15 @@ export default async function DashboardPage() {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Assets</SelectLabel>
-                          <SelectItem value="BTC">BTC</SelectItem>
-                          <SelectItem value="ETH">ETH</SelectItem>
+                          <SelectItem value="USDC">USDC</SelectItem>
+                          <SelectItem value="ADA">ADA</SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>
                     </div>
                   </CardHeader>
-                  <CardContent className="pl-2">
-                    <Kchart />
+                  <CardContent className="p2-10">
+                  <Kchart selectedAsset={selectedAsset} />
                   </CardContent>
                 </Card>
                 <Card className="col-span-2">
