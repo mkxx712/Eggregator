@@ -45,7 +45,9 @@ import {fetchCoinPriceByName} from "@/utils/fetchCmkPrice";
 import { Asset } from 'next/font/google';
 import { fetchAndSetData } from '@/utils/fetchAndSetData';
 import { createChart } from 'lightweight-charts';
-        
+import ChartSelect from "@/components/chart-selected";
+
+
 interface AssetItem {
   asset: string;
   free: string;
@@ -69,6 +71,10 @@ export default async function DashboardPage() {
   const selectedAsset = portfolio
   .filter( (item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
   .map((item: AssetItem) => item.asset);
+  // console.log(pricePromises);
+  // console.log(portfolio);
+  // console.log(prices);
+  // console.log(selectedAsset);
 
   return (  
     <>
@@ -209,7 +215,7 @@ export default async function DashboardPage() {
 
             <TabsContent value="real-time" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-5">
+                {/* <Card className="col-span-5">
                   <CardHeader>
                     <div className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle>Chart</CardTitle>
@@ -230,7 +236,11 @@ export default async function DashboardPage() {
                   <CardContent className="p2-10">
                   <Kchart selectedAsset={selectedAsset} />
                   </CardContent>
-                </Card>
+                </Card> */}
+                <script id="selectedAsset-data" type="application/json">
+                  {JSON.stringify(selectedAsset)}
+                </script>
+                <ChartSelect /> 
                 <Card className="col-span-2">
                   <CardHeader>
                     <CardTitle>Related News</CardTitle>
