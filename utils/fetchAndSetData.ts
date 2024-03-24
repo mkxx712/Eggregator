@@ -11,7 +11,13 @@ interface KlineData {
 }
 
 export async function fetchAndSetData(assets: string[] | string, setData: (data: KlineData[], asset: string) => void): Promise<void> {
-  for (const asset of assets) {
+  
+  const assetList = Array.isArray(assets) ? assets : [assets];
+
+  for (const asset of assetList) {
+
+    if (!asset) continue; // avoid empty strings
+
     try {
       const response = await axios.get(`https://api.binance.us/api/v3/klines`, {
         headers: {
