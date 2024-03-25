@@ -60,7 +60,7 @@ const ChartSelect = () => {
                         body {
                         padding: 0;
                         margin: 0;
-                        background-color: #222;
+                        background-color: #fff;
                         }
                         .lw-attribution {
                         position: relative;
@@ -85,7 +85,6 @@ const ChartSelect = () => {
                         <a href={`https://www.tradingview.com/chart/?symbol=BINANCE%3A${selectedCoin}USDT`} target="_blank">Analyze in TradingView Charts™</a>
                     </div>
                 </div>
-            {/* <Kchart selectedAsset={selectedAsset} /> */}
             <KChart selectedAsset={selectedCoin} />
             </CardContent>
         </Card>
