@@ -46,7 +46,7 @@ import { Asset } from 'next/font/google';
 import { fetchAndSetData } from '@/utils/fetchAndSetData';
 import { createChart } from 'lightweight-charts';
 import ChartSelect from "@/components/chart-selected";
-
+import { ToastContainer} from 'react-toastify';
 
 interface AssetItem {
   asset: string;
@@ -95,6 +95,7 @@ export default async function DashboardPage() {
               <TabsTrigger value="real-time">Real-Time</TabsTrigger>
               <TabsTrigger value="readme">README</TabsTrigger>
             </TabsList>
+            <ToastContainer />
             <TabsContent value="overview" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
