@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+// import React, { useEffect, useState, useRef } from 'react';
 
 import { Metadata } from "next";
 import Image from "next/image";
@@ -216,28 +216,6 @@ export default async function DashboardPage() {
 
             <TabsContent value="real-time" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                {/* <Card className="col-span-5">
-                  <CardHeader>
-                    <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle>Chart</CardTitle>
-                    <Select>
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Select an asset" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Assets</SelectLabel>
-                          <SelectItem value="USDC">USDC</SelectItem>
-                          <SelectItem value="ADA">ADA</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p2-10">
-                  <Kchart selectedAsset={selectedAsset} />
-                  </CardContent>
-                </Card> */}
                 <script id="selectedAsset-data" type="application/json">
                   {JSON.stringify(selectedAsset)}
                 </script>
