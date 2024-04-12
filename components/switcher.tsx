@@ -139,7 +139,7 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
       setGroups(updatedGroups);
     }
     
-    const response = await fetch('/api/database', {
+    const response = await fetch('/api/api_info', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
