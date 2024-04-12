@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    let db = new sqlite3.Database('./database.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    let db = new sqlite3.Database('./data/portfolio_data.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
       if (err) {
         console.error(err.message);
       } else {
@@ -11,20 +11,24 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       }
     });
 
-    db.run(`CREATE TABLE IF NOT EXISTS user_data (
-      portfolioName TEXT,
-      api TEXT,
-      apiSecret TEXT
+    db.run(`CREATE TABLE IF NOT EXISTS portfolio_data (
+        portfolioId INTEGER PRIMARY KEY,
+        portfolioName TEXT,
+        assetName TEXT,
+        amount REAL,
+        price REAL,
+        total REAL,
+        at TEXT
     )`, (err) => {
       if (err) {
         console.error(err.message);
       } else {
-        console.log('user_data table created.');
+        console.log('portfolio_data table created.');
       }
     });
 
-    const { portfolioName, api, apiSecret } = req.body;
-    db.run(`INSERT INTO user_data(portfolioName, api, apiSecret) VALUES(?, ?, ?)`, [portfolioName, api, apiSecret], function(err) {
+    const { portfolioName, assetName, amount, price, total, at } = req.body;
+    db.run(`INSERT INTO portfolio_data(portfolioName, assetName, amount, price, total, at) VALUES(?, ?, ?, ?, ?, ?)`, [portfolioName, assetName, amount, price, total, at], function(err) {
       if (err) {
         return console.error(err.message);
       }
