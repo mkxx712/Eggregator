@@ -16,7 +16,9 @@ interface NewsType {
 export async function News() {
       const response = await fetch('https://cryptopanic.com/api/v1/posts/?auth_token=' + news_api);
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          // throw new Error('Network response was not ok');
+          console.log('Network response was not ok');
+          return;
         }
         const data = await response.json();
         const idata = data["results"].slice(0,10);

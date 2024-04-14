@@ -220,7 +220,7 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
         <PopoverTrigger asChild>
         <Button
           variant="outline"
-          role="combobox"
+          role="comb0xb9BC82DE634D0D0cC439e2f27ADB90B97c4Cb0d5obox"
           aria-expanded={open}
           aria-label="Select"
           className={cn("w-[200px] justify-between", className)}
@@ -240,42 +240,6 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0">
           <Command>
-            {/* <CommandList>
-              <CommandInput placeholder="Search team..." />
-              <CommandEmpty>No Exchange found.</CommandEmpty>
-              {groups.map((group) => (
-                <CommandGroup key={group.label} heading={group.label}>
-                  {group.teams.map((team) => (
-                    <CommandItem
-                      key={team.value}
-                      onSelect={() => {
-                        setSelectedTeam(team)
-                        setOpen(false)
-                      }}
-                      className="text-sm"
-                    >
-                      <Avatar className="mr-2 h-5 w-5">
-                        <AvatarImage
-                          src={`https://avatar.vercel.sh/${team.value}.png`}
-                          alt={team.label}
-                          className="grayscale"
-                        />
-                        <AvatarFallback>SC</AvatarFallback>
-                      </Avatar>
-                      {team.label}
-                      <CheckIcon
-                        className={cn(
-                          "ml-auto h-4 w-4",
-                          selectedTeam.value === team.value
-                            ? "opacity-100"
-                            : "opacity-0"
-                        )}
-                      />
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              ))}
-            </CommandList> */}
             <CommandList>
               {groups.map((group, groupIndex) => (
                 <CommandGroup key={group.label} heading={group.label}>
@@ -357,7 +321,7 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
                       On-chain
                     </span>
                   </SelectItem>
-                  <SelectItem value="Ethereum">
+                  {/* <SelectItem value="Ethereum">
                     <span className="font-medium">Ethereum</span> -{" "}
                     <span className="text-muted-foreground">
                       On-chain
@@ -368,25 +332,25 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
                     <span className="text-muted-foreground">
                       On-chain
                     </span>
-                  </SelectItem>
-                  <SelectItem value="Coinbase">
+                  </SelectItem> */}
+                  {/* <SelectItem value="Coinbase">
                     <span className="font-medium">Coinbase</span> -{" "}
                     <span className="text-muted-foreground">
                       CEX
                     </span>
-                  </SelectItem>
+                  </SelectItem> */}
                   <SelectItem value="Binance">
                     <span className="font-medium">Binance</span> -{" "}
                     <span className="text-muted-foreground">
                       CEX
                     </span>
                   </SelectItem>
-                  <SelectItem value="OKX">
+                  {/* <SelectItem value="OKX">
                     <span className="font-medium">OKX</span> -{" "}
                     <span className="text-muted-foreground">
                       CEX
                     </span>
-                  </SelectItem>
+                  </SelectItem> */}
                 </SelectContent>
               </Select>
             </div>

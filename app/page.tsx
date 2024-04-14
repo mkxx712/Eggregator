@@ -41,6 +41,7 @@ import { Portfolio } from "@/components/portfolio";
 import Fng from "@/components/fng";
 
 import {fetchWalletBalance} from "@/utils/fetchBinanceBalance";
+import {fetchDeXTokenBalances} from "@/utils/fetchDexBalance";
 import {fetchCoinPriceByName} from "@/utils/fetchCmkPrice";
 import { Asset } from 'next/font/google';
 import { fetchAndSetData } from '@/utils/fetchAndSetData';
@@ -48,6 +49,7 @@ import { createChart } from 'lightweight-charts';
 import ChartSelect from "@/components/chart-selected";
 import { ToastContainer} from 'react-toastify';
 import MarketInfo from '@/components/market-info';
+
 
 interface AssetItem {
   asset: string;
@@ -62,7 +64,9 @@ export const metadata: Metadata = {
 
 export default async function DashboardPage() {
   const portfolio = await fetchWalletBalance();
-
+  const dexBalances = await fetchDeXTokenBalances();
+  // console.log(portfolio);
+  // console.log(dexBalances);
   // Fetch prices for all filtered assets in parallel
   const pricePromises = portfolio
     .filter((item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
@@ -252,7 +256,7 @@ export default async function DashboardPage() {
                 <p style={{ fontSize: '0.8em', color: '#888' }}>Updates every 5 minutes</p>
               </CardHeader>
               <CardContent>
-                <MarketInfo />
+                {/* <MarketInfo /> */}
               </CardContent>
             </TabsContent>
 
