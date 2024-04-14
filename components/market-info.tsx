@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import fetchMarketData from '../utils/fetchMarketData';
 import KChart from './kchart';
 
 interface MarketData {
@@ -16,16 +16,12 @@ const MarketInfo: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const promises = assets.map(asset =>
-        axios.get(`https://rest.coinapi.io/v1/exchangerate/${asset}/USD`, {
-          headers: { 'X-CoinAPI-Key': '48A352FC-DB15-4906-B32F-76F4BF0C2869' }
-        })
-      );
+      const promises = assets.map(asset => fetchMarketData(asset));
       try {
         const responses = await Promise.all(promises);
         const data = responses.map((response, index) => ({
           asset_id: assets[index],
-          rate: response.data.rate,
+          rate: response.rate,
         }));
         setMarketData(data);
       } catch (error) {
