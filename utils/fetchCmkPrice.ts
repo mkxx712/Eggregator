@@ -9,7 +9,7 @@ async function fetchCoinIdByName(coinName: string): Promise<string | null> {
   };
 
   try {
-    const response = await fetch(url, { method: 'GET', headers: headers });
+    const response = await fetch(url, { method: 'GET', headers: headers});
     const data = await response.json();
     const coin = data.data.find((c: any) =>
       c.name.toLowerCase() == coinName.toLowerCase() ||
@@ -36,7 +36,7 @@ export async function fetchCoinPriceByName(coinName: string): Promise<any> {
   };
 
   try {
-    const response = await fetch(url, { method: 'GET', headers: headers });
+    const response = await fetch(url, { method: 'GET', headers: headers});
     const data = await response.json();
     return data.data[coinId].quote.USD.price;
   } catch (error) {

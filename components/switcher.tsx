@@ -107,7 +107,7 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
   const [exchanges, setExchanges] = React.useState([]); // Specify the type of exchanges as an array of EX type objects
   const [portfolioName, setPortfolioName] = React.useState('');
   
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
 
     if (portfolioName) {
       setSelectedTeam(prevState => ({
@@ -139,6 +139,25 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
       setGroups(updatedGroups);
     }
     
+    const response = await fetch('/api/api_info', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        portfolioName,
+        api,
+        apiSecret,
+      }),
+    });
+  
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+    } else {
+      console.error('Failed to save data');
+    }
+
     console.log("selectedTeam Name:", selectedTeam);
     // Close the dialog and clear the form
     setShowNewTeamDialog(false);
@@ -146,7 +165,6 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
     setApiSecret('');
     setPortfolioName('');
   };
-  
 
   const handleSelectChange = (selectedValue: string) => {
     
@@ -170,7 +188,6 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
       });
       return;
     }
-
     const updatedGroups = [...groups];
     updatedGroups[groupIndex].teams.splice(teamIndex, 1);
     setGroups(updatedGroups);
