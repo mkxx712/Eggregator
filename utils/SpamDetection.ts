@@ -21,18 +21,21 @@ interface TokenDetails {
 }
 
 export const SpamDetection = async () => {
-  await Moralis.start({
-    apiKey: process.env.MORALIS_API,
-  });
 
-  const address = "0x4648451b5f87ff8f0f7d622bd40574bb97e25980";
+    if (!Moralis.Core.isStarted) {
+        await Moralis.start({
+            apiKey: process.env.MORALIS_API,
+        });
+    }
 
-  const chain = EvmChain.ETHEREUM;
+    const address = "0x4648451b5f87ff8f0f7d622bd40574bb97e25980";
 
-  const response = await Moralis.EvmApi.token.getWalletTokenBalances({
-    address,
-    chain,
-  });
+    const chain = EvmChain.ETHEREUM;
+
+    const response = await Moralis.EvmApi.token.getWalletTokenBalances({
+        address,
+        chain,
+    });
 
     const tokens: TokenMetadata[] = response.toJSON();
     const filteredTokens = tokens.filter(token => !token.possible_spam && token.verified_contract);
