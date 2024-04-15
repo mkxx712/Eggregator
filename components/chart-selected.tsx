@@ -25,10 +25,10 @@ const ChartSelect = () => {
     const [selectedCoin, setSelectedCoin] = useState<string>('BTC');
   
     useEffect(() => {
-        // 嘗試找到包含 selectedAsset 數據的 <script> 標籤
+        // Try to find the <script> tag that contains the selectedAsset data.
         const dataElement = document.getElementById('selectedAsset-data');
         if (dataElement && dataElement.textContent) {
-          // 解析 JSON 數據並設置狀態
+          // Parsing JSON data and setting state
           const data = JSON.parse(dataElement.textContent);
           setSelectedAssets(data);
         }

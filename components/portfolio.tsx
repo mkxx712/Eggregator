@@ -166,17 +166,49 @@ interface AssetItem {
   locked: string;
 }
 
-export function Portfolio(props:{portfolio:any, prices:any}) {
+interface DexItem {
+  symbol: string;
+  amount: string;
+  tokenPrice?: string;
+}
 
-  const data = props.portfolio
-  .filter( (item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
-  .map((item: AssetItem, index: number) => ({
-    asset: item.asset,
-    amount: Number(item.free) + Number(item.locked),
-    price: props.prices[index], // Use the corresponding fetched price
-    total: (Number(item.free) + Number(item.locked)) * props.prices[index],
-    at: "Binance.US" // This is static in your example, adjust as needed
-  }));
+export function Portfolio(
+  props:
+  {
+    portfolio: AssetItem[],
+    dexportfolio: DexItem[],
+    prices: number[]
+  }){
+
+  interface TableData {
+    asset: string;
+    amount: number;
+    price: number;
+    total: number;
+    at: string;
+  }
+  
+  // Combine portfolio and DEX portfolio into a single data array
+  const combinedData = [
+    ...props.portfolio
+      .filter((item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
+      .map((item: AssetItem, index: number) => ({
+        asset: item.asset,
+        amount: Number(item.free) + Number(item.locked),
+        price: props.prices[index], // Use the corresponding fetched price
+        total: (Number(item.free) + Number(item.locked)) * props.prices[index],
+        at: "Binance.US"
+      })),
+    ...props.dexportfolio
+      .filter((item: DexItem) => Number(item.amount) > 0)
+      .map((item: DexItem, index: number) => ({
+        asset: item.symbol,
+        amount: Number(item.amount),
+        price: Number(item.tokenPrice), // Use the corresponding fetched price
+        total: Number(item.amount) * Number(item.tokenPrice),
+        at: "MetaMask"
+      }))
+  ];
 
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -186,8 +218,8 @@ export function Portfolio(props:{portfolio:any, prices:any}) {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const table = useReactTable({
-    data,
+  const table = useReactTable<TableData>({
+    data: combinedData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

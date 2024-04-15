@@ -106,6 +106,8 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
   const [apiSecret, setApiSecret] = React.useState('') // Add status maintenance API_SECRET
   const [exchanges, setExchanges] = React.useState([]); // Specify the type of exchanges as an array of EX type objects
   const [portfolioName, setPortfolioName] = React.useState('');
+  const [showAddressInput, setShowAddressInput] = React.useState(false); // Show the address input field when the user selects DEX/Wallet
+
   
   const handleSubmit = async() => {
 
@@ -172,6 +174,9 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
         label: portfolioName || selectedValue, // Selected label name
         value: selectedValue, // Here we assume that label and value are the same
       });
+
+     // When MetaMask is selected, the address input box is displayed.
+      setShowAddressInput(selectedValue === "MetaMask");
   };
 
   const handleRemoveTeam = (groupIndex: number, teamIndex: number): void => {
@@ -354,14 +359,26 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="api">API</Label>
-              <Input id="api" placeholder="Input Your API Key" value={api} onChange={(e) => setApi(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="apiSecret">API_SECRET</Label>
-              <Input id="apiSecret" placeholder="Input Your API Secret" value={apiSecret} onChange={(e) => setApiSecret(e.target.value)} />
-            </div>
+            {/* Show API and API_SECRET input boxes when MetaMask is unchecked */}
+            {!showAddressInput && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="api">API</Label>
+                  <Input id="api" placeholder="Input Your API Key" value={api} onChange={(e) => setApi(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="apiSecret">API_SECRET</Label>
+                  <Input id="apiSecret" placeholder="Input Your API Secret" value={apiSecret} onChange={(e) => setApiSecret(e.target.value)} />
+                </div>
+              </>
+            )}
+            {/* Display address input box only when MetaMask is selected */}
+            {showAddressInput && (
+              <div className="space-y-2">
+                <Label htmlFor="address">Address</Label>
+                <Input id="address" placeholder="Input Your Address" value={apiSecret} onChange={(e) => setApiSecret(e.target.value)} />
+              </div>
+            )}
           </div>
         </div>
         <DialogFooter>

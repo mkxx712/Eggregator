@@ -38,7 +38,7 @@ export async function fetchCoinPriceByName(coinName: string): Promise<any> {
   try {
     const response = await fetch(url, { method: 'GET', headers: headers});
     const data = await response.json();
-    return data.data[coinId].quote.USD.price;
+    return data.data?.[coinId]?.quote?.USD?.price;
   } catch (error) {
     console.error('Error fetching coin price:', error);
     throw error; // Rethrow the error for handling by the caller

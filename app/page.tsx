@@ -41,7 +41,7 @@ import { Portfolio } from "@/components/portfolio";
 import Fng from "@/components/fng";
 
 import {fetchWalletBalance} from "@/utils/fetchBinanceBalance";
-import {fetchDeXTokenBalances} from "@/utils/fetchDexBalance";
+import {fetchDexTokenBalances} from "@/utils/fetchDexBalance";
 import {fetchCoinPriceByName} from "@/utils/fetchCmkPrice";
 import { Asset } from 'next/font/google';
 import { fetchAndSetData } from '@/utils/fetchAndSetData';
@@ -49,12 +49,18 @@ import { createChart } from 'lightweight-charts';
 import ChartSelect from "@/components/chart-selected";
 import { ToastContainer} from 'react-toastify';
 import MarketInfo from '@/components/market-info';
-
+import { SpamDetection } from '@/utils/SpamDetection';
 
 interface AssetItem {
   asset: string;
   free: string;
   locked: string;
+}
+
+interface DexItem {
+  symbol: string;
+  amount: string;
+  tokenPrice?: string;
 }
 
 export const metadata: Metadata = {
@@ -63,11 +69,16 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
+  
+   // Fetch prices for all filtered assets in parallel (DEX)
+  const dexportfolio = await fetchDexTokenBalances();
+
+  const selectedAssetDex = dexportfolio
+  .filter( (item: DexItem) => Number(item.amount) > 0)
+  .map((item: DexItem) => item.symbol);
+
+  // Fetch prices for all filtered assets in parallel (BinanceUS)
   const portfolio = await fetchWalletBalance();
-  const dexBalances = await fetchDeXTokenBalances();
-  // console.log(portfolio);
-  // console.log(dexBalances);
-  // Fetch prices for all filtered assets in parallel
   const pricePromises = portfolio
     .filter((item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
     .map((item: AssetItem) => fetchCoinPriceByName(item.asset));
@@ -76,10 +87,6 @@ export default async function DashboardPage() {
   const selectedAsset = portfolio
   .filter( (item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
   .map((item: AssetItem) => item.asset);
-  // console.log(pricePromises);
-  // console.log(portfolio);
-  // console.log(prices);
-  // console.log(selectedAsset);
 
   return (  
     <>
@@ -223,7 +230,8 @@ export default async function DashboardPage() {
             <TabsContent value="real-time" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                 <script id="selectedAsset-data" type="application/json">
-                  {JSON.stringify(selectedAsset)}
+                  {/* {JSON.stringify(selectedAsset)} */}
+                  {JSON.stringify(selectedAssetDex)}
                 </script>
                 <ChartSelect /> 
                 <Card className="col-span-2">
@@ -244,7 +252,11 @@ export default async function DashboardPage() {
                     <CardTitle>Current Portfolio</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Portfolio portfolio={portfolio} prices={prices} />
+                  <Portfolio 
+                    portfolio={portfolio} 
+                    dexportfolio={dexportfolio} 
+                    prices={prices} // Assuming `prices` is an array of prices for `portfolio`
+                  />
                   </CardContent>
                 </Card>
               </div>
