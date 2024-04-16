@@ -42,6 +42,7 @@ import {
 
 import {fetchCoinPriceByName} from "@/utils/fetchCmkPrice";
 import { propagateServerField } from "next/dist/server/lib/render-server";
+import { AssetItem, DexItem} from "@/Models/AssetItems";
 
 export type Assets = {
   asset: string
@@ -160,23 +161,43 @@ export const columns: ColumnDef<Assets>[] = [
   },
 ]
 
-interface AssetItem {
-  asset: string;
-  free: string;
-  locked: string;
+interface AssetItemListProps {
+  portfolio: AssetItem[];
+  dexportfolio: DexItem[];
+  prices: number[];
 }
 
-export function Portfolio(props:{portfolio:any, prices:any}) {
+export function Portfolio(props:AssetItemListProps){
 
-  const data = props.portfolio
-  .filter( (item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
-  .map((item: AssetItem, index: number) => ({
-    asset: item.asset,
-    amount: Number(item.free) + Number(item.locked),
-    price: props.prices[index], // Use the corresponding fetched price
-    total: (Number(item.free) + Number(item.locked)) * props.prices[index],
-    at: "Binance.US" // This is static in your example, adjust as needed
-  }));
+  interface TableData {
+    asset: string;
+    amount: number;
+    price: number;
+    total: number;
+    at: string;
+  }
+  
+  // Combine portfolio and DEX portfolio into a single data array
+  const combinedData = [
+    ...props.portfolio
+      .filter((item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
+      .map((item: AssetItem, index: number) => ({
+        asset: item.asset,
+        amount: parseFloat((Number(item.free) + Number(item.locked)).toFixed(2)),
+        price: parseFloat(props.prices[index].toFixed(2)), // Use the corresponding fetched price
+        total: parseFloat(((Number(item.free) + Number(item.locked)) * props.prices[index]).toFixed(2)),
+        at: "Binance.US"
+      })),
+    ...props.dexportfolio
+      .filter((item: DexItem) => Number(item.amount) > 0)
+      .map((item: DexItem, index: number) => ({
+        asset: item.symbol,
+        amount: parseFloat(Number(item.amount).toFixed(2)),
+        price: parseFloat(Number(item.tokenPrice).toFixed(2)), // Use the corresponding fetched price
+        total: parseFloat((Number(item.amount) * Number(item.tokenPrice)).toFixed(2)),
+        at: "MetaMask"
+      }))
+  ];
 
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -186,8 +207,8 @@ export function Portfolio(props:{portfolio:any, prices:any}) {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const table = useReactTable({
-    data,
+  const table = useReactTable<TableData>({
+    data: combinedData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

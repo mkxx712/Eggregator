@@ -106,6 +106,8 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
   const [apiSecret, setApiSecret] = React.useState('') // Add status maintenance API_SECRET
   const [exchanges, setExchanges] = React.useState([]); // Specify the type of exchanges as an array of EX type objects
   const [portfolioName, setPortfolioName] = React.useState('');
+  const [showAddressInput, setShowAddressInput] = React.useState(false); // Show the address input field when the user selects DEX/Wallet
+
   
   const handleSubmit = async() => {
 
@@ -172,6 +174,9 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
         label: portfolioName || selectedValue, // Selected label name
         value: selectedValue, // Here we assume that label and value are the same
       });
+
+     // When MetaMask is selected, the address input box is displayed.
+      setShowAddressInput(selectedValue === "MetaMask");
   };
 
   const handleRemoveTeam = (groupIndex: number, teamIndex: number): void => {
@@ -220,7 +225,7 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
         <PopoverTrigger asChild>
         <Button
           variant="outline"
-          role="combobox"
+          role="comb0xb9BC82DE634D0D0cC439e2f27ADB90B97c4Cb0d5obox"
           aria-expanded={open}
           aria-label="Select"
           className={cn("w-[200px] justify-between", className)}
@@ -240,42 +245,6 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0">
           <Command>
-            {/* <CommandList>
-              <CommandInput placeholder="Search team..." />
-              <CommandEmpty>No Exchange found.</CommandEmpty>
-              {groups.map((group) => (
-                <CommandGroup key={group.label} heading={group.label}>
-                  {group.teams.map((team) => (
-                    <CommandItem
-                      key={team.value}
-                      onSelect={() => {
-                        setSelectedTeam(team)
-                        setOpen(false)
-                      }}
-                      className="text-sm"
-                    >
-                      <Avatar className="mr-2 h-5 w-5">
-                        <AvatarImage
-                          src={`https://avatar.vercel.sh/${team.value}.png`}
-                          alt={team.label}
-                          className="grayscale"
-                        />
-                        <AvatarFallback>SC</AvatarFallback>
-                      </Avatar>
-                      {team.label}
-                      <CheckIcon
-                        className={cn(
-                          "ml-auto h-4 w-4",
-                          selectedTeam.value === team.value
-                            ? "opacity-100"
-                            : "opacity-0"
-                        )}
-                      />
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              ))}
-            </CommandList> */}
             <CommandList>
               {groups.map((group, groupIndex) => (
                 <CommandGroup key={group.label} heading={group.label}>
@@ -357,7 +326,7 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
                       On-chain
                     </span>
                   </SelectItem>
-                  <SelectItem value="Ethereum">
+                  {/* <SelectItem value="Ethereum">
                     <span className="font-medium">Ethereum</span> -{" "}
                     <span className="text-muted-foreground">
                       On-chain
@@ -368,36 +337,48 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
                     <span className="text-muted-foreground">
                       On-chain
                     </span>
-                  </SelectItem>
-                  <SelectItem value="Coinbase">
+                  </SelectItem> */}
+                  {/* <SelectItem value="Coinbase">
                     <span className="font-medium">Coinbase</span> -{" "}
                     <span className="text-muted-foreground">
                       CEX
                     </span>
-                  </SelectItem>
+                  </SelectItem> */}
                   <SelectItem value="Binance">
                     <span className="font-medium">Binance</span> -{" "}
                     <span className="text-muted-foreground">
                       CEX
                     </span>
                   </SelectItem>
-                  <SelectItem value="OKX">
+                  {/* <SelectItem value="OKX">
                     <span className="font-medium">OKX</span> -{" "}
                     <span className="text-muted-foreground">
                       CEX
                     </span>
-                  </SelectItem>
+                  </SelectItem> */}
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="api">API</Label>
-              <Input id="api" placeholder="Input Your API Key" value={api} onChange={(e) => setApi(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="apiSecret">API_SECRET</Label>
-              <Input id="apiSecret" placeholder="Input Your API Secret" value={apiSecret} onChange={(e) => setApiSecret(e.target.value)} />
-            </div>
+            {/* Show API and API_SECRET input boxes when MetaMask is unchecked */}
+            {!showAddressInput && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="api">API</Label>
+                  <Input id="api" placeholder="Input Your API Key" value={api} onChange={(e) => setApi(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="apiSecret">API_SECRET</Label>
+                  <Input id="apiSecret" placeholder="Input Your API Secret" value={apiSecret} onChange={(e) => setApiSecret(e.target.value)} />
+                </div>
+              </>
+            )}
+            {/* Display address input box only when MetaMask is selected */}
+            {showAddressInput && (
+              <div className="space-y-2">
+                <Label htmlFor="address">Address</Label>
+                <Input id="address" placeholder="Input Your Address" value={apiSecret} onChange={(e) => setApiSecret(e.target.value)} />
+              </div>
+            )}
           </div>
         </div>
         <DialogFooter>

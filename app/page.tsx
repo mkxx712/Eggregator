@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+// import React, { useEffect, useState, useRef } from 'react';
 
 import { Metadata } from "next";
 import Image from "next/image";
@@ -41,6 +41,7 @@ import { Portfolio } from "@/components/portfolio";
 import Fng from "@/components/fng";
 
 import {fetchWalletBalance} from "@/utils/fetchBinanceBalance";
+import {fetchDexTokenBalances} from "@/utils/fetchDexBalance";
 import {fetchCoinPriceByName} from "@/utils/fetchCmkPrice";
 import { Asset } from 'next/font/google';
 import { fetchAndSetData } from '@/utils/fetchAndSetData';
@@ -48,12 +49,9 @@ import { createChart } from 'lightweight-charts';
 import ChartSelect from "@/components/chart-selected";
 import { ToastContainer} from 'react-toastify';
 import MarketInfo from '@/components/market-info';
+import { SpamDetection } from '@/utils/SpamDetection';
+import { AssetItem, DexItem} from "@/Models/AssetItems";
 
-interface AssetItem {
-  asset: string;
-  free: string;
-  locked: string;
-}
 
 export const metadata: Metadata = {
   title: "Eggregator",
@@ -61,9 +59,16 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-  const portfolio = await fetchWalletBalance();
+  
+   // Fetch prices for all filtered assets in parallel (DEX)
+  const dexportfolio = await fetchDexTokenBalances();
 
-  // Fetch prices for all filtered assets in parallel
+  const selectedAssetDex = dexportfolio
+  .filter( (item: DexItem) => Number(item.amount) > 0)
+  .map((item: DexItem) => item.symbol);
+
+  // Fetch prices for all filtered assets in parallel (BinanceUS)
+  const portfolio = await fetchWalletBalance();
   const pricePromises = portfolio
     .filter((item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
     .map((item: AssetItem) => fetchCoinPriceByName(item.asset));
@@ -72,10 +77,6 @@ export default async function DashboardPage() {
   const selectedAsset = portfolio
   .filter( (item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
   .map((item: AssetItem) => item.asset);
-  // console.log(pricePromises);
-  // console.log(portfolio);
-  // console.log(prices);
-  // console.log(selectedAsset);
 
   return (  
     <>
@@ -218,30 +219,9 @@ export default async function DashboardPage() {
 
             <TabsContent value="real-time" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                {/* <Card className="col-span-5">
-                  <CardHeader>
-                    <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle>Chart</CardTitle>
-                    <Select>
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Select an asset" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Assets</SelectLabel>
-                          <SelectItem value="USDC">USDC</SelectItem>
-                          <SelectItem value="ADA">ADA</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p2-10">
-                  <Kchart selectedAsset={selectedAsset} />
-                  </CardContent>
-                </Card> */}
                 <script id="selectedAsset-data" type="application/json">
-                  {JSON.stringify(selectedAsset)}
+                  {/* {JSON.stringify(selectedAsset)} */}
+                  {JSON.stringify(selectedAssetDex)}
                 </script>
                 <ChartSelect /> 
                 <Card className="col-span-2">
@@ -262,7 +242,11 @@ export default async function DashboardPage() {
                     <CardTitle>Current Portfolio</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Portfolio portfolio={portfolio} prices={prices} />
+                  <Portfolio 
+                    portfolio={portfolio} 
+                    dexportfolio={dexportfolio} 
+                    prices={prices} // Assuming `prices` is an array of prices for `portfolio`
+                  />
                   </CardContent>
                 </Card>
               </div>
@@ -274,7 +258,7 @@ export default async function DashboardPage() {
                 <p style={{ fontSize: '0.8em', color: '#888' }}>Updates every 5 minutes</p>
               </CardHeader>
               <CardContent>
-                <MarketInfo />
+                {/* <MarketInfo /> */}
               </CardContent>
             </TabsContent>
 
