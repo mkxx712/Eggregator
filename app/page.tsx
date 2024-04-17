@@ -7,19 +7,9 @@ import { CalendarIcon, CookieIcon } from "@radix-ui/react-icons";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { News } from "@/components/news";
 import {
   Select,
@@ -40,18 +30,17 @@ import Kchart from "@/components/kchart";
 import { Portfolio } from "@/components/portfolio";
 import Fng from "@/components/fng";
 
-import {fetchWalletBalance} from "@/utils/fetchBinanceBalance";
-import {fetchDexTokenBalances} from "@/utils/fetchDexBalance";
-import {fetchCoinPriceByName} from "@/utils/fetchCmkPrice";
-import { Asset } from 'next/font/google';
-import { fetchAndSetData } from '@/utils/fetchAndSetData';
-import { createChart } from 'lightweight-charts';
+import { fetchWalletBalance } from "@/utils/fetchBinanceBalance";
+import { fetchDexTokenBalances } from "@/utils/fetchDexBalance";
+import { fetchCoinPriceByName } from "@/utils/fetchCmkPrice";
+import { Asset } from "next/font/google";
+import { fetchAndSetData } from "@/utils/fetchAndSetData";
+import { createChart } from "lightweight-charts";
 import ChartSelect from "@/components/chart-selected";
-import { ToastContainer} from 'react-toastify';
-import MarketInfo from '@/components/market-info';
-import { SpamDetection } from '@/utils/SpamDetection';
-import { AssetItem, DexItem} from "@/Models/AssetItems";
-
+import { ToastContainer } from "react-toastify";
+import MarketInfo from "@/components/market-info";
+import { SpamDetection } from "@/utils/SpamDetection";
+import { AssetItem, DexItem } from "@/Models/AssetItems";
 
 export const metadata: Metadata = {
   title: "Eggregator",
@@ -59,13 +48,12 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-  
-   // Fetch prices for all filtered assets in parallel (DEX)
+  // Fetch prices for all filtered assets in parallel (DEX)
   const dexportfolio = await fetchDexTokenBalances();
 
   const selectedAssetDex = dexportfolio
-  .filter( (item: DexItem) => Number(item.amount) > 0)
-  .map((item: DexItem) => item.symbol);
+    .filter((item: DexItem) => Number(item.amount) > 0)
+    .map((item: DexItem) => item.symbol);
 
   // Fetch prices for all filtered assets in parallel (BinanceUS)
   const portfolio = await fetchWalletBalance();
@@ -75,20 +63,20 @@ export default async function DashboardPage() {
   const prices = await Promise.all(pricePromises);
 
   const selectedAsset = portfolio
-  .filter( (item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
-  .map((item: AssetItem) => item.asset);
+    .filter((item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
+    .map((item: AssetItem) => item.asset);
 
-  return (  
+  return (
     <>
       <div className="flex-col md:flex">
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2"> 
-                <img src="https://i.imgur.com/vtjp3tz.png" alt="Logo" className="h-8 w-8"/>
-                <h2 className="text-3xl font-bold tracking-normal">Eggregator</h2>
+            <div className="flex items-center space-x-2">
+              <img src="https://i.imgur.com/vtjp3tz.png" alt="Logo" className="h-8 w-8" />
+              <h2 className="text-3xl font-bold tracking-normal">Eggregator</h2>
             </div>
             <div className="flex items-center space-x-2">
-                <EXSwitcher />
+              <EXSwitcher />
             </div>
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
@@ -103,9 +91,7 @@ export default async function DashboardPage() {
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total Assets
-                    </CardTitle>
+                    <CardTitle className="text-sm font-medium">Total Assets</CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -118,16 +104,12 @@ export default async function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">$45,231.89</div>
-                    <p className="text-xs text-muted-foreground">
-                      +20.1% from last month
-                    </p>
+                    <p className="text-xs text-muted-foreground">+20.1% from last month</p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Revenue(24h)
-                    </CardTitle>
+                    <CardTitle className="text-sm font-medium">Revenue(24h)</CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -140,16 +122,12 @@ export default async function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">+2350</div>
-                    <p className="text-xs text-muted-foreground">
-                      +180.1% from last month
-                    </p>
+                    <p className="text-xs text-muted-foreground">+180.1% from last month</p>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Ethereum Gas
-                    </CardTitle>
+                    <CardTitle className="text-sm font-medium">Ethereum Gas</CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -167,9 +145,7 @@ export default async function DashboardPage() {
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Fear & Greed Index
-                    </CardTitle>
+                    <CardTitle className="text-sm font-medium">Fear & Greed Index</CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -223,7 +199,7 @@ export default async function DashboardPage() {
                   {/* {JSON.stringify(selectedAsset)} */}
                   {JSON.stringify(selectedAssetDex)}
                 </script>
-                <ChartSelect /> 
+                <ChartSelect />
                 <Card className="col-span-2">
                   <CardHeader>
                     <CardTitle>Related News</CardTitle>
@@ -242,11 +218,11 @@ export default async function DashboardPage() {
                     <CardTitle>Current Portfolio</CardTitle>
                   </CardHeader>
                   <CardContent>
-                  <Portfolio 
-                    portfolio={portfolio} 
-                    dexportfolio={dexportfolio} 
-                    prices={prices} // Assuming `prices` is an array of prices for `portfolio`
-                  />
+                    <Portfolio
+                      portfolio={portfolio}
+                      dexportfolio={dexportfolio}
+                      prices={prices} // Assuming `prices` is an array of prices for `portfolio`
+                    />
                   </CardContent>
                 </Card>
               </div>
@@ -255,29 +231,22 @@ export default async function DashboardPage() {
             <TabsContent value="market-info" className="space-y-4">
               <CardHeader>
                 <CardTitle>Market Info</CardTitle>
-                <p style={{ fontSize: '0.8em', color: '#888' }}>Updates every 5 minutes</p>
+                <p style={{ fontSize: "0.8em", color: "#888" }}>Updates every 5 minutes</p>
               </CardHeader>
-              <CardContent>
-                {/* <MarketInfo /> */}
-              </CardContent>
+              <CardContent>{/* <MarketInfo /> */}</CardContent>
             </TabsContent>
 
             <TabsContent value="readme" className="space-y-4">
               <div className="md:grid-cols-2 lg:grid-cols-7">
-                  <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">
-                    README
-                  </h3>
+                <h3 className="mt-8 scroll-m-20 text-2xl font-semibold tracking-tight">README</h3>
 
-                  <p className="ml-4 leading-7 [&:not(:first-child)]:mt-6">
-                    Update your .env file(.env.example provided), and then see
-                    your crypto all in one place!
-                  </p>
+                <p className="ml-4 leading-7 [&:not(:first-child)]:mt-6">
+                  Update your .env file(.env.example provided), and then see your crypto all in one place!
+                </p>
 
-                  <h4 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">
-                    Contributors:
-                  </h4>
+                <h4 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">Contributors:</h4>
 
-                  <p className="leading-7 [&:not(:first-child)]:mt-6">
+                <p className="leading-7 [&:not(:first-child)]:mt-6">
                   <HoverCard>
                     <HoverCardTrigger asChild>
                       <Button variant="link">@mkxx712</Button>
@@ -290,14 +259,10 @@ export default async function DashboardPage() {
                         </Avatar>
                         <div className="space-y-1">
                           <h4 className="text-sm font-semibold">@mkxx712</h4>
-                          <p className="text-sm">
-                            FinTech@Duke. Busy coding because knowing nothing.
-                          </p>
+                          <p className="text-sm">FinTech@Duke. Busy coding because knowing nothing.</p>
                           <div className="flex items-center pt-2">
                             <CookieIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
-                            <span className="text-xs text-muted-foreground">
-                              mkxx712@gmail.com
-                            </span>
+                            <span className="text-xs text-muted-foreground">mkxx712@gmail.com</span>
                           </div>
                         </div>
                       </div>
@@ -318,23 +283,17 @@ export default async function DashboardPage() {
                           <p className="text-sm">FinTech@Duke. </p>
                           <div className="flex items-center pt-2">
                             <CookieIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
-                            <span className="text-xs text-muted-foreground">
-                              smilewilson1999@gmail.com
-                            </span>
+                            <span className="text-xs text-muted-foreground">smilewilson1999@gmail.com</span>
                           </div>
                         </div>
                       </div>
                     </HoverCardContent>
                   </HoverCard>
-                  </p>
+                </p>
 
-                  <h4 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">
-                    Special Thanks:
-                  </h4>
+                <h4 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">Special Thanks:</h4>
 
-                  <p className="ml-4 text-sm leading-7 [&:not(:first-child)]:mt-6">
-                    @Yulonghe97, @Mike, @ETHDenver
-                  </p>
+                <p className="ml-4 text-sm leading-7 [&:not(:first-child)]:mt-6">@Yulonghe97, @Mike, @ETHDenver</p>
               </div>
             </TabsContent>
           </Tabs>

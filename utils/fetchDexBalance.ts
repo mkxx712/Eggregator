@@ -1,6 +1,5 @@
-import dotenv from 'dotenv';
-import { SpamDetection } from './SpamDetection';
-
+import dotenv from "dotenv";
+import { SpamDetection } from "./SpamDetection";
 
 dotenv.config();
 
@@ -33,7 +32,7 @@ const options = {
   }),
 };
 
-export async function fetchDexTokenBalances(){
+export async function fetchDexTokenBalances() {
   const validTokensDetails: TokenDetails[] = await SpamDetection();
   const priceMap = new Map(validTokensDetails.map(token => [token.symbol, token.usdPrice]));
   const res = await fetch(`https://eth-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API}`, options);
@@ -42,12 +41,14 @@ export async function fetchDexTokenBalances(){
   const balances: { tokenBalances: TokenBalance[] } = response.result;
 
   // Remove tokens with zero balance
-  const nonZeroBalances: TokenBalance[] = balances.tokenBalances.filter((token: TokenBalance) => token.tokenBalance !== "0");
+  const nonZeroBalances: TokenBalance[] = balances.tokenBalances.filter(
+    (token: TokenBalance) => token.tokenBalance !== "0",
+  );
 
-  let tokenBalances: { symbol: string; amount: string; tokenPrice?: string}[] = [];
+  let tokenBalances: { symbol: string; amount: string; tokenPrice?: string }[] = [];
   for (let token of nonZeroBalances) {
     let balance: any = token.tokenBalance;
-    
+
     const options = {
       method: "POST" as const,
       headers: {
@@ -67,10 +68,9 @@ export async function fetchDexTokenBalances(){
 
     if (priceMap.has(metadata.result.symbol)) {
       const amount = (Number(token.tokenBalance) / 10 ** metadata.result.decimals).toFixed(2);
-      const usdPrice = (priceMap.get(metadata.result.symbol))?.toString();
+      const usdPrice = priceMap.get(metadata.result.symbol)?.toString();
       tokenBalances.push({ symbol: metadata.result.symbol, amount: amount, tokenPrice: usdPrice });
     }
-    
   }
   return tokenBalances;
 }
