@@ -1,11 +1,7 @@
-"use client"
+"use client";
 
 import * as React from "react";
-import {
-  CaretSortIcon,
-  ChevronDownIcon,
-  DotsHorizontalIcon,
-} from "@radix-ui/react-icons"
+import { CaretSortIcon, ChevronDownIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -17,10 +13,10 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -29,41 +25,32 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-import {fetchCoinPriceByName} from "@/utils/fetchCmkPrice";
+import { fetchCoinPriceByName } from "@/utils/fetchCmkPrice";
 import { propagateServerField } from "next/dist/server/lib/render-server";
+import { AssetItem, DexItem } from "@/Models/AssetItems";
 
 export type Assets = {
-  asset: string
-  amount: number
-  price: number
-  total: number
-  at: string
-}
+  asset: string;
+  amount: number;
+  price: number;
+  total: number;
+  at: string;
+};
 
 export const columns: ColumnDef<Assets>[] = [
   {
     accessorKey: "asset",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           Asset
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="uppercase">{row.getValue("asset")}</div>,
   },
@@ -71,14 +58,11 @@ export const columns: ColumnDef<Assets>[] = [
     accessorKey: "amount",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           Amount
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("amount")}</div>,
   },
@@ -86,14 +70,11 @@ export const columns: ColumnDef<Assets>[] = [
     accessorKey: "price",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           Price
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("price")}</div>,
   },
@@ -101,14 +82,11 @@ export const columns: ColumnDef<Assets>[] = [
     accessorKey: "total",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           Total
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("total")}</div>,
   },
@@ -116,14 +94,11 @@ export const columns: ColumnDef<Assets>[] = [
     accessorKey: "at",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
           At
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => <div className="">{row.getValue("at")}</div>,
   },
@@ -131,7 +106,7 @@ export const columns: ColumnDef<Assets>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
+      const payment = row.original;
 
       return (
         <DropdownMenu>
@@ -143,51 +118,61 @@ export const columns: ColumnDef<Assets>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => window.open('https://www.google.com', '_blank')}
-            >
-              Trade!
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => window.open('https://www.coinmarketcap.com', '_blank')}
-            >
+            <DropdownMenuItem onClick={() => window.open("https://www.google.com", "_blank")}>Trade!</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => window.open("https://www.coinmarketcap.com", "_blank")}>
               View more info.
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
-interface AssetItem {
-  asset: string;
-  free: string;
-  locked: string;
+interface AssetItemListProps {
+  portfolio: AssetItem[];
+  dexportfolio: DexItem[];
+  prices: number[];
 }
 
-export function Portfolio(props:{portfolio:any, prices:any}) {
+export function Portfolio({ portfolio, dexportfolio, prices }: AssetItemListProps) {
+  interface TableData {
+    asset: string;
+    amount: number;
+    price: number;
+    total: number;
+    at: string;
+  }
 
-  const data = props.portfolio
-  .filter( (item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
-  .map((item: AssetItem, index: number) => ({
-    asset: item.asset,
-    amount: Number(item.free) + Number(item.locked),
-    price: props.prices[index], // Use the corresponding fetched price
-    total: (Number(item.free) + Number(item.locked)) * props.prices[index],
-    at: "Binance.US" // This is static in your example, adjust as needed
-  }));
+  // Combine portfolio and DEX portfolio into a single data array
+  const combinedData = [
+    ...portfolio
+      .filter((item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
+      .map((item: AssetItem, index: number) => ({
+        asset: item.asset,
+        amount: parseFloat((Number(item.free) + Number(item.locked)).toFixed(2)),
+        price: parseFloat(prices[index].toFixed(2)), // Use the corresponding fetched price
+        total: parseFloat(((Number(item.free) + Number(item.locked)) * prices[index]).toFixed(2)),
+        at: "Binance.US",
+      })),
+    ...dexportfolio
+      .filter((item: DexItem) => Number(item.amount) > 0)
+      .map((item: DexItem, index: number) => ({
+        asset: item.symbol,
+        amount: parseFloat(Number(item.amount).toFixed(2)),
+        price: parseFloat(Number(item.tokenPrice).toFixed(2)), // Use the corresponding fetched price
+        total: parseFloat((Number(item.amount) * Number(item.tokenPrice)).toFixed(2)),
+        at: "MetaMask",
+      })),
+  ];
 
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
 
-  const table = useReactTable({
-    data,
+  const table = useReactTable<TableData>({
+    data: combinedData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -203,7 +188,7 @@ export function Portfolio(props:{portfolio:any, prices:any}) {
       columnVisibility,
       rowSelection,
     },
-  })
+  });
 
   return (
     <div className="w-full">
@@ -211,9 +196,7 @@ export function Portfolio(props:{portfolio:any, prices:any}) {
         <Input
           placeholder="Filter exchanges..."
           value={(table.getColumn("at")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("at")?.setFilterValue(event.target.value)
-          }
+          onChange={event => table.getColumn("at")?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
         <DropdownMenu>
@@ -225,20 +208,18 @@ export function Portfolio(props:{portfolio:any, prices:any}) {
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
+              .filter(column => column.getCanHide())
+              .map(column => {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
                     className="capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
+                    onCheckedChange={value => column.toggleVisibility(!!value)}
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
-                )
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -246,46 +227,30 @@ export function Portfolio(props:{portfolio:any, prices:any}) {
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map(header => {
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
+              table.getRowModel().rows.map(row => (
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map(cell => (
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>
@@ -306,16 +271,11 @@ export function Portfolio(props:{portfolio:any, prices:any}) {
           >
             Previous
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
+          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
             Next
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }

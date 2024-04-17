@@ -2,7 +2,7 @@ import Gauge from "@/components/fng_components/Gauge";
 import Indicator from "@/components/fng_components/Indicator";
 import Cursor from "@/components/fng_components/Cursor";
 
-const Fng = async() => {
+const Fng = async () => {
   const fngFetch = await fetch("https://api.alternative.me/fng/", {
     next: { revalidate: 3600 },
   });
@@ -14,8 +14,7 @@ const Fng = async() => {
     const maxValue = 100;
     const minAngle = 0;
     const maxAngle = 180;
-    const normalizedAngle = 
-      (value * (maxAngle - minAngle)) / maxValue + minAngle;
+    const normalizedAngle = (value * (maxAngle - minAngle)) / maxValue + minAngle;
     return normalizedAngle;
   };
 
@@ -23,7 +22,7 @@ const Fng = async() => {
 
   return (
     <main className="flex max-h-screen flex-col items-center space-y-10 p-0">
-      <div className="flex justify-center items-center rounded-d" style={{background: 'none'}}>
+      <div className="flex justify-center items-center rounded-d" style={{ background: "none" }}>
         <div className="relative">
           <Cursor normalizedAngle={normalizedAngle} />
           <Indicator fng={fng} />
@@ -32,6 +31,6 @@ const Fng = async() => {
       </div>
     </main>
   );
-}
+};
 
 export default Fng;

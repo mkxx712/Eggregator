@@ -1,6 +1,6 @@
 // utils/fetchAndSetData.ts
-import axios from 'axios';
-import { Time } from 'lightweight-charts';
+import axios from "axios";
+import { Time } from "lightweight-charts";
 
 interface KlineData {
   time: Time;
@@ -10,22 +10,23 @@ interface KlineData {
   close: number;
 }
 
-export async function fetchAndSetData(assets: string[] | string, setData: (data: KlineData[], asset: string) => void): Promise<void> {
-  
+export async function fetchAndSetData(
+  assets: string[] | string,
+  setData: (data: KlineData[], asset: string) => void,
+): Promise<void> {
   const assetList = Array.isArray(assets) ? assets : [assets];
 
   for (const asset of assetList) {
-
     if (!asset) continue; // avoid empty strings
 
     try {
       const response = await axios.get(`https://api.binance.us/api/v3/klines`, {
         headers: {
-          'Accept-Language': 'en',
+          "Accept-Language": "en",
         },
         params: {
           symbol: `${asset}USDT`,
-          interval: '4h',
+          interval: "4h",
           limit: 1000,
         },
       });
