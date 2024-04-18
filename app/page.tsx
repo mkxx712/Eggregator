@@ -274,7 +274,7 @@ export default async function DashboardPage() {
                 <p style={{ fontSize: '0.8em', color: '#888' }}>Updates every 5 minutes</p>
               </CardHeader>
               <CardContent>
-                <MarketInfo />
+                  <MarketInfo />
               </CardContent>
             </TabsContent>
 

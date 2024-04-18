@@ -1,10 +1,18 @@
-const API_KEY = '48A352FC-DB15-4906-B32F-76F4BF0C2869';
+const API_KEY = 'CG-KEMvoaUbEXqHF1gQyii3ASZH'
 
-// fetchMarketData.ts
+// list of coin ids: 'https://docs.google.com/spreadsheets/d/1wTTuxXt8n9q7C4NDXqQpI3wpKu1_5bGVmP9Xz0XGSyU/edit#gid=0'
+
 const fetchMarketData = async (asset: string) => {
-    const response = await fetch(`https://rest.coinapi.io/v1/exchangerate/${asset}/USD`, {
-      headers: { 'X-CoinAPI-Key': API_KEY }
-    });
+    const url = `https://api.coingecko.com/api/v3/simple/price?ids=${asset}&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=true&precision=2`;
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        'x-cg-api-key': API_KEY,
+      }
+    };
+  
+    const response = await fetch(url, options);
   
     if (!response.ok) {
       throw new Error(`Failed to fetch market data for ${asset}`);

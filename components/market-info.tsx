@@ -5,13 +5,16 @@ import fetchMarketData from '../utils/fetchMarketData';
 import KChart from './kchart';
 
 interface MarketData {
-  asset_id: string;
-  rate: number;
+  name: string;
+  price: number;
+  volume: number;
+  coinPercent: number;
+  mktCap: number;
 }
 
 const MarketInfo: React.FC = () => {
   const [marketData, setMarketData] = useState<MarketData[]>([]);
-  const [assets, setAssets] = useState(['BTC', 'ETH', 'XRP','DOGE']); // Initial assets
+  const [assets, setAssets] = useState(['bitcoin','ethereum']); // Initial assets
   const [inputValue, setInputValue] = useState(''); 
 
   useEffect(() => {
@@ -19,9 +22,13 @@ const MarketInfo: React.FC = () => {
       const promises = assets.map(asset => fetchMarketData(asset));
       try {
         const responses = await Promise.all(promises);
+        console.log(responses);
         const data = responses.map((response, index) => ({
-          asset_id: assets[index],
-          rate: response.rate,
+          name: assets[index],
+          price: response[assets[index]].usd,
+          volume: response[assets[index]].usd_24h_vol,
+          coinPercent: response[assets[index]].usd_24h_change,
+          mktCap: response[assets[index]].usd_market_cap,
         }));
         setMarketData(data);
       } catch (error) {
@@ -75,10 +82,13 @@ const MarketInfo: React.FC = () => {
         <button style={{ backgroundColor: '#007BFF', color: 'white', border: 'none', padding: '10px', borderRadius: '5px', cursor: 'pointer' }} onClick={() => handleAddAsset(inputValue)}>Add</button>
       </div>
       {marketData.map((data) => (
-        <div key={data.asset_id} style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '5px' }}>
-          <h4 style={{ marginBottom: '10px' }}>{data.asset_id}</h4>
-          <p style={{ color: 'green', fontWeight: 'bold' }}>Price: {data.rate.toFixed(2)} USD</p>
-          <button style={{ backgroundColor: '#f0f0f0', border: 'none', padding: '10px', borderRadius: '5px', cursor: 'pointer' }} onClick={() => handleRemoveAsset(data.asset_id)}>Remove</button>
+        <div key={data.name} style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '5px' }}>
+          <h4 style={{ marginBottom: '10px' }}>{data.name.toUpperCase()}</h4>
+          <p style={{ color: 'green', fontWeight: 'bold' }}>Price: {data.price.toFixed(2)} USD</p>
+          <p>Volume: {data.volume.toFixed(2)}</p>
+          <p>24h Change: {data.coinPercent.toFixed(2)}%</p>
+          <p>Market Cap: {data.mktCap.toFixed(2)}</p>
+          <button style={{ backgroundColor: '#f0f0f0', border: 'none', padding: '10px', borderRadius: '5px', cursor: 'pointer' }} onClick={() => handleRemoveAsset(data.name)}>Remove</button>
         </div>
       ))}
     </div>
