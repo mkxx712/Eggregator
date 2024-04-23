@@ -1,6 +1,6 @@
-// utils/fetchAndSetData.ts
 import axios from "axios";
 import { Time } from "lightweight-charts";
+import { Kumar_One_Outline } from "next/font/google";
 
 interface KlineData {
   time: Time;
@@ -16,9 +16,9 @@ export async function fetchAndSetData(
 ): Promise<void> {
   const assetList = Array.isArray(assets) ? assets : [assets];
 
-  for (const asset of assetList) {
-    if (!asset) continue; // avoid empty strings
-
+  const fetchPromises = assetList.map(async (asset) => {
+    if (!asset) return; // avoid empty strings and undefined
+    
     try {
       const response = await axios.get(`https://api.binance.us/api/v3/klines`, {
         headers: {
@@ -39,8 +39,13 @@ export async function fetchAndSetData(
       }));
 
       setData(data, asset);
+      // console.log(`${asset}data fetch successfully`);
     } catch (error) {
       console.error("Error fetching data for asset: ", asset, error);
+      throw error;
     }
-  }
+  });
+  
+  await Promise.all(fetchPromises);
+
 }

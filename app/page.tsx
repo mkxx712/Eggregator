@@ -26,7 +26,6 @@ import { RecentSales } from "@/components/recent-transactions";
 import EXSwitcher from "@/components/switcher";
 import { UserNav } from "@/components/user-nav";
 import { Gas } from "@/components/gas";
-import Kchart from "@/components/kchart";
 import { Portfolio } from "@/components/portfolio";
 import Fng from "@/components/fng";
 
