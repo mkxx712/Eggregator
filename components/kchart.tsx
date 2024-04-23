@@ -1,8 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { createChart, CrosshairMode, LineStyle } from "lightweight-charts";
+import React, { useState, useEffect, useRef } from "react";
+import { createChart, CrosshairMode, LineStyle} from "lightweight-charts";
 import { fetchAndSetData } from "@/utils/fetchAndSetData";
+import styles from '@/styles/loader.module.css';
+import Lottie from "lottie-react";
+import carAnimation from "@/lotties/car-animation.json";
+
 
 interface KChartProps {
   selectedAsset: string[] | string;
@@ -10,9 +14,22 @@ interface KChartProps {
 
 const KChart: React.FC<KChartProps> = ({ selectedAsset }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDefault, setDefault] = useState(true);
+  const [isUnsupported, setIsUnsupported] = useState(false);
 
   useEffect(() => {
+
+    if (!selectedAsset) {
+      setDefault(false);
+      setIsUnsupported(false);
+      return;
+    }
+
     if (!chartContainerRef.current) return;
+
+    setIsLoading(true);
+    setIsUnsupported(false);
 
     const chart = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.offsetWidth,
@@ -54,7 +71,7 @@ const KChart: React.FC<KChartProps> = ({ selectedAsset }) => {
         },
       },
     });
-
+    
     // const candleSeries = chart.addCandlestickSeries({
     //   upColor: 'rgba(0, 150, 136, 1)', // Bright green for up candles
     //   downColor: 'rgba(255, 82, 82, 1)', // Deep red for down candles
@@ -66,6 +83,8 @@ const KChart: React.FC<KChartProps> = ({ selectedAsset }) => {
 
     fetchAndSetData(selectedAsset, candleStickData => {
       // Convert data for line series
+
+      if (!selectedAsset) return;
       const lineData = candleStickData.map(datapoint => ({
         time: datapoint.time,
         value: (datapoint.close + datapoint.open) / 2,
@@ -79,17 +98,44 @@ const KChart: React.FC<KChartProps> = ({ selectedAsset }) => {
         topColor: "rgba(56, 33, 110, 0.6)",
         bottomColor: "rgba(56, 33, 110, 0.1)",
       });
+
       areaSeries.setData(lineData);
 
       // Add Candlestick Chart Series
       const candleSeries = chart.addCandlestickSeries();
       candleSeries.setData(candleStickData);
-    }).catch(error => console.error("Error setting data: ", error));
+      setIsLoading(false);
+    })
+    .catch(error => {
+      console.error("Error setting data: ", error);
+      setIsLoading(false);
+      setIsUnsupported(true);
+    });
 
-    return () => chart.remove();
+    return () => {
+      chart.remove();
+    };
   }, [selectedAsset]);
-
-  return <div ref={chartContainerRef} />;
+  
+  return (
+    <div className="relative" ref={chartContainerRef} style={{ height: '300px' }}>
+      {isLoading && (
+        <div className={styles.loader} style={{ position: 'absolute', top: '30%', left: '50%', zIndex: 10 }}>
+        </div>
+      )}
+      {isUnsupported && (
+        <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 10 }}>
+          This coin is not supported currently.
+        </div>
+      )}
+      {!isLoading && !selectedAsset && (
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 10 }}>
+          <Lottie animationData={carAnimation} loop={true} />
+          Please select a coin to view the chart.
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default KChart;

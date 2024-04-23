@@ -46,61 +46,71 @@ export const columns: ColumnDef<Assets>[] = [
     accessorKey: "asset",
     header: ({ column }) => {
       return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Asset
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="min-w-[120px]">
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Asset
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
-    cell: ({ row }) => <div className="uppercase">{row.getValue("asset")}</div>,
+    cell: ({ row }) => <div className="min-w-[120px] uppercase ml-4">{row.getValue("asset")}</div>,
   },
   {
     accessorKey: "amount",
     header: ({ column }) => {
       return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Amount
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="min-w-[120px]">
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Amount
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("amount")}</div>,
+    cell: ({ row }) => <div className="min-w-[120px] lowercase ml-4">{row.getValue("amount")}</div>,
   },
   {
     accessorKey: "price",
     header: ({ column }) => {
       return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Price
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="min-w-[120px]">
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Price
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("price")}</div>,
+    cell: ({ row }) => <div className="min-w-[120px] lowercase ml-4">{row.getValue("price")}</div>,
   },
   {
     accessorKey: "total",
     header: ({ column }) => {
       return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Total
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="min-w-[120px]">
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Total
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("total")}</div>,
+    cell: ({ row }) => <div className="min-w-[120px] lowercase ml-4">{row.getValue("total")}</div>,
   },
   {
     accessorKey: "at",
     header: ({ column }) => {
       return (
-        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          At
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="min-w-[120px]">
+          <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            At
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue("at")}</div>,
+    cell: ({ row }) => <div className="min-w-[120px] ml-4">{row.getValue("at")}</div>,
   },
   {
     id: "actions",
@@ -136,6 +146,12 @@ interface AssetItemListProps {
 }
 
 export function Portfolio({ portfolio, dexportfolio, prices }: AssetItemListProps) {
+
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
+
   interface TableData {
     asset: string;
     amount: number;
@@ -165,12 +181,7 @@ export function Portfolio({ portfolio, dexportfolio, prices }: AssetItemListProp
         at: "MetaMask",
       })),
   ];
-
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-
+  
   const table = useReactTable<TableData>({
     data: combinedData,
     columns,

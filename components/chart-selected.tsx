@@ -8,8 +8,8 @@ import { Select, SelectValue, SelectTrigger, SelectContent, SelectItem, SelectGr
 import KChart from "./kchart";
 
 const ChartSelect = () => {
-  const [selectedAssets, setSelectedAssets] = useState<string[]>(["BTC"]);
-  const [selectedCoin, setSelectedCoin] = useState<string>("BTC");
+  const [selectedAssets, setSelectedAssets] = useState<string[]>([]);
+  const [selectedCoin, setSelectedCoin] = useState<string>("");
 
   useEffect(() => {
     // Try to find the <script> tag that contains the selectedAsset data.
@@ -28,7 +28,7 @@ const ChartSelect = () => {
           <CardTitle>Portfolio Table</CardTitle>
           <Select onValueChange={setSelectedCoin}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Default - BTC" />
+              <SelectValue placeholder="Select a coin" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -75,7 +75,7 @@ const ChartSelect = () => {
             </a>
           </div>
         </div>
-        <KChart selectedAsset={selectedCoin} />
+        <KChart selectedAsset={selectedCoin}/>
       </CardContent>
     </Card>
   );

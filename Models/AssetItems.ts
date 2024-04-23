@@ -1,11 +1,14 @@
-export interface AssetItem {
+interface AssetItem {
   asset: string;
   free: string;
   locked: string;
 }
 
-export interface DexItem {
+interface DexItem {
   symbol: string;
   amount: string;
   tokenPrice?: string;
 }
+
+
+export { type AssetItem, type DexItem }
