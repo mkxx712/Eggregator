@@ -16,9 +16,9 @@ export async function fetchAndSetData(
 ): Promise<void> {
   const assetList = Array.isArray(assets) ? assets : [assets];
 
-  const fetchPromises = assetList.map(async (asset) => {
+  const fetchPromises = assetList.map(async asset => {
     if (!asset) return; // avoid empty strings and undefined
-    
+
     try {
       const response = await axios.get(`https://api.binance.us/api/v3/klines`, {
         headers: {
@@ -45,7 +45,6 @@ export async function fetchAndSetData(
       throw error;
     }
   });
-  
-  await Promise.all(fetchPromises);
 
+  await Promise.all(fetchPromises);
 }

@@ -10,5 +10,4 @@ interface DexItem {
   tokenPrice?: string;
 }
 
-
-export { type AssetItem, type DexItem }
+export { type AssetItem, type DexItem };
