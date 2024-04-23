@@ -75,7 +75,7 @@ const ChartSelect = () => {
             </a>
           </div>
         </div>
-        <KChart selectedAsset={selectedCoin}/>
+        <KChart selectedAsset={selectedCoin} />
       </CardContent>
     </Card>
   );

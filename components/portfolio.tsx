@@ -146,7 +146,6 @@ interface AssetItemListProps {
 }
 
 export function Portfolio({ portfolio, dexportfolio, prices }: AssetItemListProps) {
-
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -160,28 +159,41 @@ export function Portfolio({ portfolio, dexportfolio, prices }: AssetItemListProp
     at: string;
   }
 
+  const formatPrice = (price: number) => {
+    const formatter = new Intl.NumberFormat("en-US", {
+      style: "decimal",
+      minimumFractionDigits: 4, // Minimum number of decimal places
+      maximumFractionDigits: 4, // Maximum number of decimal places
+    });
+    return formatter.format(price);
+  };
+
   // Combine portfolio and DEX portfolio into a single data array
-  const combinedData = [
-    ...portfolio
-      .filter((item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
-      .map((item: AssetItem, index: number) => ({
-        asset: item.asset,
-        amount: parseFloat((Number(item.free) + Number(item.locked)).toFixed(2)),
-        price: parseFloat(prices[index].toFixed(2)), // Use the corresponding fetched price
-        total: parseFloat(((Number(item.free) + Number(item.locked)) * prices[index]).toFixed(2)),
-        at: "Binance.US",
-      })),
-    ...dexportfolio
-      .filter((item: DexItem) => Number(item.amount) > 0)
-      .map((item: DexItem, index: number) => ({
-        asset: item.symbol,
-        amount: parseFloat(Number(item.amount).toFixed(2)),
-        price: parseFloat(Number(item.tokenPrice).toFixed(2)), // Use the corresponding fetched price
-        total: parseFloat((Number(item.amount) * Number(item.tokenPrice)).toFixed(2)),
-        at: "MetaMask",
-      })),
-  ];
-  
+  // use useMemo to avoid re-rendering the table on every state change
+  const combinedData = React.useMemo(
+    () => [
+      ...portfolio
+        .filter((item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
+        .map((item: AssetItem, index: number) => ({
+          asset: item.asset,
+          amount: parseFloat(formatPrice(Number(item.free) + Number(item.locked))),
+          price: parseFloat(formatPrice(prices[index])), // Use the corresponding fetched price
+          total: parseFloat(formatPrice((Number(item.free) + Number(item.locked)) * prices[index])),
+          at: "Binance.US",
+        })),
+      ...dexportfolio
+        .filter((item: DexItem) => Number(item.amount) > 0)
+        .map((item: DexItem, index: number) => ({
+          asset: item.symbol,
+          amount: parseFloat(formatPrice(Number(item.amount))),
+          price: parseFloat(formatPrice(Number(item.tokenPrice))), // Use the corresponding fetched price
+          total: parseFloat(formatPrice(Number(item.amount) * Number(item.tokenPrice))),
+          at: "MetaMask",
+        })),
+    ],
+    [portfolio, dexportfolio, prices],
+  );
+
   const table = useReactTable<TableData>({
     data: combinedData,
     columns,
