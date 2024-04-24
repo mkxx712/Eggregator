@@ -63,27 +63,30 @@ const MarketInfo = () => {
     return (
         <div className={styles.container}>
             {/* Search Bar */}
-            <div className={styles.searchBar}>
-                <input
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={handleSearch}
-                className={styles.searchInput}
-                />
-                <FaSearch className={styles.searchIcon}/>
+            <div className={styles.card}>
+                <div className={styles.searchBar}>
+                    <input
+                    type="text"
+                    placeholder="Search"
+                    value={searchTerm}
+                    onChange={handleSearch}
+                    className={styles.searchInput}
+                    />
+                    <FaSearch className={styles.searchIcon}/>
+                </div>
             </div>
 
             {/* Currency Selector */}
-            <div className={styles.currencySelector}>
+            {/* <div className={styles.currencySelector}>
                 <button onClick={() => setCurrency("usd")} className={styles.button}>USD</button>   
-                {/* <button onClick={() => setCurrency("inr")}>INR</button> */}
-            </div>
+                <button onClick={() => setCurrency("inr")}>INR</button>
+            </div> */}
 
             {/* Crypto Table */}
             {filteredCryptoData.length === 0 ? (
                 <div className={styles.noResults}>No Results Found</div>
             ) : (
+                <div className={styles.card}>
                 <table className={styles.table}>
                     {/* Table Head */}
                     <thead>
@@ -120,9 +123,11 @@ const MarketInfo = () => {
                         ))}
                   </tbody>
                 </table>
+            </div>
               )}
 
             {/* Pagination */}
+            <div className={styles.card}>
             <div className={styles.pagination}>
                 {[1, 2, 3, 4].map((item) => (
                     <button
@@ -136,6 +141,7 @@ const MarketInfo = () => {
                         {item}
                     </button>
                 ))}
+            </div>
             </div>
         </div>
     );

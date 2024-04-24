@@ -1,133 +1,137 @@
 /* MarketInfo.module.css */
 
 .container {
-    font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f1f5f9; /* Light grey background */
+    padding: 2rem; /* Padding around the content for spacing */
+    color: #1a202c; /* Set the primary text color to a darker shade for better readability */
+    border-radius: 12px;
+}
+  
+  /* Card styles */
+  .card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem; /* Padding inside the card */
+    margin-bottom: 1rem; /* Margin between cards */
+    border: 1px solid #f1f5f9; /* Light border for card */
   }
   
+  /* Search bar styling */
   .searchBar {
     display: flex;
-    justify-content: center;
-    padding: 1px;
+    justify-content: space-between;
+    align-items: center;
   }
   
   .searchInput {
-    padding: 8px 16px;
-    margin: 8px 0;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    background-clip: padding-box;
-    font-size: 16px;
-    width: 100%;
-    max-width: 600px; /* Maximum width of the search bar */
+    flex-grow: 1;
+    margin-right: 1rem; /* Space between search input and button */
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 0.85rem; /* Slightly smaller font size */
+    font-weight: 600;
+    letter-spacing: 1px; /* Spacing between letters */
   }
   
   .searchIcon {
-    margin-left: -35px;
+    color: #4a5568;
     cursor: pointer;
-    font-size: 20px;
-    color: #ccc;
-    align-self: center;
   }
   
-  .currencySelector {
-    text-align: center;
-    margin: 10px 0;
-  }
-  
+  /* Button styling */
   .button {
-    background-color: #0071e3;
-    color: white;
+    background-color: #333; /* Active button with darker background */
+    color: #fff;
     border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
+    padding: 0.5rem 1rem;
     border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase; /* Makes text uppercase */
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
   }
   
-  .noResults {
-    text-align: center;
-    padding: 20px;
+  .button:hover {
+    background-color: #333;
   }
   
-  .table {
-    width: 100%;
-    text-align: left;
-    border-collapse: collapse;
+  .coinImage {
+    width: 25px; /* Reduced size of the coin images */
+    height: 25px;
+    border-radius: 50%; /* Keep images round */
   }
 
-  .table tr:nth-child(odd) {
-    background-color: #f9f9f9; /* Light gray for odd rows */
-  }
-  
-  .table tr:nth-child(even) {
-    background-color: #ffffff; /* White for even rows */
+  /* Table styling */
+  .table {
+    width: 100%;
+    margin-top: 0; /* Adjust as needed */
+    border-collapse: collapse;
+    border-spacing: 0;
   }
   
   .table th {
-    padding: 12px;
-    font-size: 1.25rem;
+    background-color: #f1f5f9; /* Light gray background for headers */
+    color: #333;
     text-align: left;
-    background-color: #f2f2f2;
+    font-size: 0.85rem; /* Slightly smaller font size */
+    font-weight: 600;
+    letter-spacing: 1px; /* Spacing between letters */
+    padding: 0.75rem 1rem;
   }
-
+  
   .table td {
-    padding: 8px;
+    color: #333;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid #f9f9f9;
   }
   
-  /* .coinNameCell {
-    display: flex;
-    align-items: center;
-  } */
+  /* Striped table rows for better readability */
+  .table tr:nth-child(odd) {
+    font-size: 0.85rem; /* Slightly smaller font size */
+    font-weight: 500;
+    letter-spacing: 1px; 
+    background-color: #f9f9f9;
+    text-transform: uppercase;
+  }
 
-  .coinCell {
-    display: flex;
-    align-items: center; /* Align items in the center vertically */
-    gap: 10px; /* Space between image and coin name */
-  }  
-  
-  .coinImage {
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    margin-right: 10px;
+  .table tr:nth-child(even) {
+    font-size: 0.85rem; /* Slightly smaller font size */
+    font-weight: 500;
+    letter-spacing: 1px; 
+    background-color: #fff; /* White for even rows */
+    text-transform: uppercase;
   }
   
-  .link {
-    color: #0071e3;
-    text-decoration: none;
-  }
-  
+  /* Pagination styling at the bottom of the table */
   .pagination {
-    text-align: center;
-    padding: 20px;
-  }
-
-  .pageButton {
-    background-color: #f0f0f0; /* Light gray background */
-    color: #0071e3; /* Blue text color similar to the image provided */
-    border: 1px solid #d1d1d1; /* Subtle border */
-    padding: 8px 16px; /* Padding for spacing */
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    margin: 0 8px; /* Margin for spacing between buttons */
-    cursor: pointer;
-    border-radius: 8px; /* Rounded corners */
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+    display: flex;
+    justify-content: center;
+    list-style: none;
   }
   
-  .pageButton:hover {
-    background-color: #0071e3; /* Darker background on hover */
-    color: white; /* White text on hover */
+  .pageButton {
+    background-color: #e2e2e2; /* Gray background */
+    color: #333;
+    border: 1px solid #e2e2e2;
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.85rem; /* Slightly smaller font size */
+    font-weight: 600;
+    letter-spacing: 1px; /* Spacing between letters */
   }
   
   .pageButton.active {
-    background-color: #0051ba; /* Even darker background for the active page */
-    color: white;
-    border-color: #0051ba;
+    background-color: #333; /* Active button with darker background */
+    color: #fff;
+  }
+  
+  .pageButton:hover {
+    background-color: #333; /* Active button with darker background */
+    color: #fff;
   }
