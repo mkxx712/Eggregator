@@ -1,97 +1,144 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
-import fetchMarketData from '../utils/fetchMarketData';
-import KChart from './kchart';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { FaSearch } from "react-icons/fa";
+import { AiOutlineDollarCircle } from "react-icons/ai";
+import { BiRupee } from "react-icons/bi";
+import { FiTrendingUp, FiTrendingDown } from "react-icons/fi";
+import { HiOutlineArrowsUpDown } from "react-icons/hi2";
+import Link from 'next/link';
+import styles from '../styles/MarketInfo.module.css';
 
-interface MarketData {
-  name: string;
-  price: number;
-  volume: number;
-  coinPercent: number;
-  mktCap: number;
+type TopCoinObj = {
+    coinName: string,
+    image: string,
+    percentChange: number,
+    current_price: number,
+    id: string,
+    symbol: string,
+    price_change_percentage_24h: number,
+    market_cap: number,
+    total_volume: number
 }
 
-const MarketInfo: React.FC = () => {
-  const [marketData, setMarketData] = useState<MarketData[]>([]);
-  const [assets, setAssets] = useState(['bitcoin','ethereum']); // Initial assets
-  const [inputValue, setInputValue] = useState(''); 
+const MarketInfo = () => {
+    const [cryptoData, setCryptoData] = useState<TopCoinObj[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [page, setPage] = useState<number>(1);
+    const [active, setActive] = useState<number>(1);
+    const [currency, setCurrency] = useState("usd");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const promises = assets.map(asset => fetchMarketData(asset));
-      try {
-        const responses = await Promise.all(promises);
-        console.log(responses);
-        const data = responses.map((response, index) => ({
-          name: assets[index],
-          price: response[assets[index]].usd,
-          volume: response[assets[index]].usd_24h_vol,
-          coinPercent: response[assets[index]].usd_24h_change,
-          mktCap: response[assets[index]].usd_market_cap,
-        }));
-        setMarketData(data);
-      } catch (error) {
-        console.error('Failed to fetch market data:', error);
-      }
-    };// Fetch data immediately and then every 5 minutes
-    fetchData();
-    const intervalId = setInterval(fetchData, 5 * 60 * 1000);
+    // Fetching data
+    useEffect(() => {
+        const fetchCoins = async () => {
+            try {
+                const response = await axios.get(`https://api.coingecko.com/api/v3/coins/markets`, {
+                    params: {
+                        vs_currency: currency,
+                        order: 'market_cap_desc',
+                        per_page: 80,
+                        page: 1,
+                        sparkline: false
+                    }
+                });
+                setCryptoData(response.data);
+            } catch (error) {
+                console.error('Error fetching coins:', error);
+            }
+        };
+        
+        fetchCoins();
+    }, [currency]);
 
-    // Clean up the interval on unmount
-    return () => clearInterval(intervalId);
-  }, [assets]); // Re-run effect when assets change
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value.toLowerCase());
+    };
 
-  const handleAddAsset = (asset: string) => {
+    const filteredCryptoData = cryptoData.filter(coin =>
+        coin.id.toLowerCase().includes(searchTerm) ||
+        coin.symbol.toLowerCase().includes(searchTerm)
+    );
 
-    if (assets.length >= 7) {
-      console.error('Maximum number of assets reached');
-      return;
-    }
-    
-    const upperCaseAsset = asset.toUpperCase();
-    const isValid = /^[A-Z0-9]+$/.test(upperCaseAsset);
-  
-    if (isValid) {
-      setAssets(prevAssets => {
-        if (!prevAssets.includes(upperCaseAsset)) {
-          return [...prevAssets, upperCaseAsset];
-        } else {
-          console.error('Asset already exists:', upperCaseAsset);
-          return prevAssets;
-        }
-      });
-    } else {
-      console.error('Invalid asset name:', asset);
-    }
-  };
+    return (
+        <div className={styles.container}>
+            {/* Search Bar */}
+            <div className={styles.searchBar}>
+                <input
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={handleSearch}
+                className={styles.searchInput}
+                />
+                <FaSearch className={styles.searchIcon}/>
+            </div>
 
-  const handleRemoveAsset = (asset: string) => {
-    setAssets(prevAssets => prevAssets.filter(a => a !== asset));
-  };
+            {/* Currency Selector */}
+            <div className={styles.currencySelector}>
+                <button onClick={() => setCurrency("usd")} className={styles.button}>USD</button>   
+                {/* <button onClick={() => setCurrency("inr")}>INR</button> */}
+            </div>
 
-  return (
-    <div style={{ display: 'grid', gap: '20px', gridTemplateColumns: 'repeat(4, 1fr)' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', backgroundColor: '#f8f8f8', padding: '20px', borderRadius: '10px' }}>
-        <input type="text" placeholder="Add asset" value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            handleAddAsset(inputValue);
-            setInputValue('');
-          }
-        }} style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }} />
-        <button style={{ backgroundColor: '#007BFF', color: 'white', border: 'none', padding: '10px', borderRadius: '5px', cursor: 'pointer' }} onClick={() => handleAddAsset(inputValue)}>Add</button>
-      </div>
-      {marketData.map((data) => (
-        <div key={data.name} style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '5px' }}>
-          <h4 style={{ marginBottom: '10px' }}>{data.name.toUpperCase()}</h4>
-          <p style={{ color: 'green', fontWeight: 'bold' }}>Price: {data.price.toFixed(2)} USD</p>
-          <p>Volume: {data.volume.toFixed(2)}</p>
-          <p>24h Change: {data.coinPercent.toFixed(2)}%</p>
-          <p>Market Cap: {data.mktCap.toFixed(2)}</p>
-          <button style={{ backgroundColor: '#f0f0f0', border: 'none', padding: '10px', borderRadius: '5px', cursor: 'pointer' }} onClick={() => handleRemoveAsset(data.name)}>Remove</button>
+            {/* Crypto Table */}
+            {filteredCryptoData.length === 0 ? (
+                <div className={styles.noResults}>No Results Found</div>
+            ) : (
+                <table className={styles.table}>
+                    {/* Table Head */}
+                    <thead>
+                        <tr>
+                            <th>Coin</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>24h %</th>
+                            <th>Market Cap</th>
+                            <th>Volume</th>
+                            {/* ... other headers */}
+                        </tr>
+                    </thead>
+                    {/* Table Body */}
+                    <tbody>
+                        {filteredCryptoData.slice((page - 1) * 20, page * 20).map((coin,index) => (
+                            <tr key={coin.id} className={index % 2 === 0 ? styles.evenRow : styles.oddRow}>
+                            <td className={styles.coinNameCell}>
+                                <Link href={`/${coin.id}`}>
+                                    {/* <img src={coin.image} alt={coin.id} className={styles.coinImage} /> */}
+                                    <span style={{ cursor: 'pointer' }}>
+                                        <img src={coin.image} alt={coin.id} className={styles.coinImage} />
+                                    </span>
+                                </Link>
+                            </td>
+                            <td>{coin.id}</td>
+                            <td>{currency === "usd" ? "$" : <BiRupee />} {coin.current_price.toLocaleString()}</td>
+                            <td style={{color: coin.price_change_percentage_24h > 0 ? 'green' : 'red'}}>
+                            {coin.price_change_percentage_24h.toFixed(2)}%
+                            </td>
+                            <td>{currency === "usd" ? "$" : <BiRupee />} {coin.market_cap.toLocaleString()}</td>
+                            <td>{currency === "usd" ? "$" : <BiRupee />} {coin.total_volume.toLocaleString()}</td>
+                        </tr>
+                        ))}
+                  </tbody>
+                </table>
+              )}
+
+            {/* Pagination */}
+            <div className={styles.pagination}>
+                {[1, 2, 3, 4].map((item) => (
+                    <button
+                        key={item}
+                        onClick={() => {
+                            setPage(item);
+                            setActive(item);
+                        }}
+                        className={`${styles.pageButton} ${active === item ? styles.active : ''}`}
+                    >
+                        {item}
+                    </button>
+                ))}
+            </div>
         </div>
-      ))}
-    </div>
-  );
+    );
 };
+
 export default MarketInfo;

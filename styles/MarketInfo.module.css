@@ -1,0 +1,133 @@
+/* MarketInfo.module.css */
+
+.container {
+    font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  .searchBar {
+    display: flex;
+    justify-content: center;
+    padding: 1px;
+  }
+  
+  .searchInput {
+    padding: 8px 16px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-clip: padding-box;
+    font-size: 16px;
+    width: 100%;
+    max-width: 600px; /* Maximum width of the search bar */
+  }
+  
+  .searchIcon {
+    margin-left: -35px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #ccc;
+    align-self: center;
+  }
+  
+  .currencySelector {
+    text-align: center;
+    margin: 10px 0;
+  }
+  
+  .button {
+    background-color: #0071e3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  
+  .noResults {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+  }
+
+  .table tr:nth-child(odd) {
+    background-color: #f9f9f9; /* Light gray for odd rows */
+  }
+  
+  .table tr:nth-child(even) {
+    background-color: #ffffff; /* White for even rows */
+  }
+  
+  .table th {
+    padding: 12px;
+    font-size: 1.25rem;
+    text-align: left;
+    background-color: #f2f2f2;
+  }
+
+  .table td {
+    padding: 8px;
+  }
+  
+  /* .coinNameCell {
+    display: flex;
+    align-items: center;
+  } */
+
+  .coinCell {
+    display: flex;
+    align-items: center; /* Align items in the center vertically */
+    gap: 10px; /* Space between image and coin name */
+  }  
+  
+  .coinImage {
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    margin-right: 10px;
+  }
+  
+  .link {
+    color: #0071e3;
+    text-decoration: none;
+  }
+  
+  .pagination {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .pageButton {
+    background-color: #f0f0f0; /* Light gray background */
+    color: #0071e3; /* Blue text color similar to the image provided */
+    border: 1px solid #d1d1d1; /* Subtle border */
+    padding: 8px 16px; /* Padding for spacing */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 0 8px; /* Margin for spacing between buttons */
+    cursor: pointer;
+    border-radius: 8px; /* Rounded corners */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+  }
+  
+  .pageButton:hover {
+    background-color: #0071e3; /* Darker background on hover */
+    color: white; /* White text on hover */
+  }
+  
+  .pageButton.active {
+    background-color: #0051ba; /* Even darker background for the active page */
+    color: white;
+    border-color: #0051ba;
+  }
