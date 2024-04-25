@@ -244,12 +244,12 @@ export default async function DashboardPage() {
                 </script>
                 <ChartSelect /> 
                 <Card className="col-span-2">
-                  <CardHeader>
-                    <CardTitle>Market Data</CardTitle>
+                  {/* <CardHeader> */}
+                    {/* <CardTitle>Market Data</CardTitle> */}
                     {/* <CardDescription>
                       Supported by CryptoPanic.
                     </CardDescription> */}
-                  </CardHeader>
+                  {/* </CardHeader> */}
                   <CardContent>
                     <MarketInfo />
                   </CardContent>
