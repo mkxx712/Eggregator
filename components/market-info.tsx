@@ -37,7 +37,7 @@ const MarketInfo = () => {
                     params: {
                         vs_currency: currency,
                         order: 'market_cap_desc',
-                        per_page: 80,
+                        per_page: 9,
                         page: 1,
                         sparkline: false
                     }
@@ -95,8 +95,8 @@ const MarketInfo = () => {
                             <th>Name</th>
                             <th>Price</th>
                             <th>24h %</th>
-                            <th>Market Cap</th>
-                            <th>Volume</th>
+                            {/* <th>Market Cap</th>
+                            <th>Volume</th> */}
                             {/* ... other headers */}
                         </tr>
                     </thead>
@@ -117,8 +117,8 @@ const MarketInfo = () => {
                             <td style={{color: coin.price_change_percentage_24h > 0 ? 'green' : 'red'}}>
                             {coin.price_change_percentage_24h.toFixed(2)}%
                             </td>
-                            <td>{currency === "usd" ? "$" : <BiRupee />} {coin.market_cap.toLocaleString()}</td>
-                            <td>{currency === "usd" ? "$" : <BiRupee />} {coin.total_volume.toLocaleString()}</td>
+                            {/* <td>{currency === "usd" ? "$" : <BiRupee />} {coin.market_cap.toLocaleString()}</td>
+                            <td>{currency === "usd" ? "$" : <BiRupee />} {coin.total_volume.toLocaleString()}</td> */}
                         </tr>
                         ))}
                   </tbody>
@@ -127,7 +127,7 @@ const MarketInfo = () => {
               )}
 
             {/* Pagination */}
-            <div className={styles.card}>
+            {/* <div className={styles.card}> */}
             <div className={styles.pagination}>
                 {[1, 2, 3, 4].map((item) => (
                     <button
@@ -142,7 +142,7 @@ const MarketInfo = () => {
                     </button>
                 ))}
             </div>
-            </div>
+            {/* </div> */}
         </div>
     );
 };
