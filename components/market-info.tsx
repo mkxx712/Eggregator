@@ -10,7 +10,29 @@ import { HiOutlineArrowsUpDown } from "react-icons/hi2";
 import Link from 'next/link';
 import styles from '../styles/MarketInfo.module.css';
 
-const ITEMS_PER_PAGE = 10;
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from "@/components/ui/table";
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription } from "@/components/ui/card";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationPrevious,
+    PaginationNext,
+  } from "@/components/ui/pagination";
+import { CardHeader } from '@nextui-org/react';
+
+const ITEMS_PER_PAGE = 6;
 
 type TopCoinObj = {
     coinName: string,
@@ -85,7 +107,7 @@ const MarketInfo = () => {
 
       const paginationRange = (current: number, total: number): number[] => {
         const range: number[] = [];
-        for (let i = Math.max(1, current - 2); i <= Math.min(current + 2, total); i++) {
+        for (let i = Math.max(1, current - 1); i <= Math.min(current + 1, total); i++) {
           range.push(i);
         }
         return range;
@@ -94,83 +116,74 @@ const MarketInfo = () => {
     const displayRange = paginationRange(page, pageCount);
 
     return (
-        <div className={styles.container}>
-            {/* Search Bar */}
-            <div className={styles.header}>
-            <h1 className={styles.title}>Market</h1>
-            <div className={styles.card}>
-                <div className={styles.searchBar}>
-                <input
-                    type="text"
-                    placeholder="Search"
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    className={styles.searchInput}
-                />
-                <FaSearch className={styles.searchIcon}/>
-                </div>
-            </div>
-            </div>
-
-            {/* Crypto Table */}
-            {filteredCryptoData.length === 0 ? (
-                <div className={styles.noResults}>No Results Found</div>
-            ) : (
-                <div className={styles.card}>
-                <table className={styles.table}>
-                    {/* Table Head */}
-                    <thead>
-                        <tr>
-                            <th>Coin</th>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>24h %</th>
-                            {/* <th>Market Cap</th>
-                            <th>Volume</th> */}
-                            {/* ... other headers */}
-                        </tr>
-                    </thead>
-                    {/* Table Body */}
-                    <tbody>
-                    {currentItems.map((coin, index) => (
-                        <tr key={coin.id} className={index % 2 === 0 ? styles.evenRow : styles.oddRow}>
-                        <td className={styles.coinCell}>
-                            {/* Make sure to only render the coin symbol here if that's what you want */}
-                            <img src={coin.image} alt={coin.symbol} className={styles.coinImage} />
-                        </td>
-                        <td>
-                            {/* Render the full name of the coin here */}
-                            {coin.symbol}
-                        </td>
-                        <td>
-                            {/* Render the current price here */}
-                            {currency === "usd" ? "$" : <BiRupee />} {coin.current_price.toLocaleString()}
-                        </td>
-                        <td style={{ color: coin.price_change_percentage_24h > 0 ? 'green' : 'red' }}>
-                            {/* Render the 24-hour price change here */}
-                            {coin.price_change_percentage_24h.toFixed(2)}%
-                        </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
-              )}
-
-            {/* Pagination */}
-            {/* <div className={styles.card}> */}
-            <div className={styles.pagination}>
-                {displayRange.map((item) => (
-                <button
-                    key={item}
-                    onClick={() => handlePageClick(item)}
-                    className={`${styles.pageButton} ${active === item ? styles.active : ''}`}
-                >
-                    {item}
-                </button>
-                ))}
-            </div>
-            {/* </div> */}
+        <div>
+            {/* <Card> */}
+                <CardContent>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px' }}>
+                    <div className={styles.title}>Market</div>
+                        <Input
+                            type="text"
+                            placeholder="Search"
+                            value={searchTerm}
+                            onChange={handleSearch}
+                            // You might need to adjust the class or styling
+                        />
+                        {/* <FaSearch /> */}
+                    </div>
+                </CardContent>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Coin</TableHead>
+                                <TableHead>Name</TableHead>
+                                <TableHead>Price</TableHead>
+                                <TableHead>24h %</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {currentItems.map((coin, index) => (
+                                <TableRow key={coin.id}>
+                                    <TableCell>
+                                        <img src={coin.image} alt={coin.symbol} className={styles.coinImage} />
+                                    </TableCell>
+                                    <TableCell>{coin.symbol.toUpperCase()}</TableCell>
+                                    <TableCell>{currency === "usd" ? "$" : <BiRupee />} {coin.current_price.toLocaleString()}</TableCell>
+                                    <TableCell style={{ color: coin.price_change_percentage_24h > 0 ? 'green' : 'red' }}>
+                                        {coin.price_change_percentage_24h.toFixed(2)}%
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+                <Pagination style={{paddingBottom: '8px' }}>
+                    <PaginationContent>
+                        <PaginationItem>
+                        <PaginationPrevious
+                            onClick={() => handlePageClick(Math.max(page - 1, 1))}
+                            // disabled={page === 1}
+                        />
+                        </PaginationItem>
+                        {displayRange.map((item) => (
+                        <PaginationItem key={item}>
+                            <PaginationLink
+                            onClick={() => handlePageClick(item)}
+                            isActive={item === page}
+                            >
+                            {item}
+                            </PaginationLink>
+                        </PaginationItem>
+                        ))}
+                        <PaginationItem>
+                        <PaginationNext
+                            onClick={() => handlePageClick(Math.min(page + 1, pageCount))}
+                            // disabled={page === pageCount}
+                        />
+                        </PaginationItem>
+                    </PaginationContent>
+                    </Pagination>
+            {/* </Card> */}
         </div>
     );
 };

@@ -250,9 +250,9 @@ export default async function DashboardPage() {
                       Supported by CryptoPanic.
                     </CardDescription> */}
                   {/* </CardHeader> */}
-                  <CardContent>
+                  {/* <CardContent> */}
                     <MarketInfo />
-                  </CardContent>
+                  {/* </CardContent> */}
                 </Card>
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
