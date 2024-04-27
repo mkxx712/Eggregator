@@ -10,7 +10,7 @@ import { HiOutlineArrowsUpDown } from "react-icons/hi2";
 import Link from 'next/link';
 import styles from '../styles/MarketInfo.module.css';
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 10;
 
 type TopCoinObj = {
     coinName: string,
@@ -97,7 +97,7 @@ const MarketInfo = () => {
         <div className={styles.container}>
             {/* Search Bar */}
             <div className={styles.header}>
-            <h1 className={styles.title}>Market Place</h1>
+            <h1 className={styles.title}>Market</h1>
             <div className={styles.card}>
                 <div className={styles.searchBar}>
                 <input
