@@ -1,97 +1,196 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
-import fetchMarketData from '../utils/fetchMarketData';
-import KChart from './kchart';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { FaSearch } from "react-icons/fa";
+import { AiOutlineDollarCircle } from "react-icons/ai";
+import { BiRupee } from "react-icons/bi";
+import { FiTrendingUp, FiTrendingDown } from "react-icons/fi";
+import { HiOutlineArrowsUpDown } from "react-icons/hi2";
+import Link from 'next/link';
 
-interface MarketData {
-  name: string;
-  price: number;
-  volume: number;
-  coinPercent: number;
-  mktCap: number;
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from "@/components/ui/table";
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationPrevious,
+    PaginationNext,
+  } from "@/components/ui/pagination";
+// import { CardHeader } from '@nextui-org/react';
+
+const ITEMS_PER_PAGE = 6;
+
+type TopCoinObj = {
+    coinName: string,
+    image: string,
+    percentChange: number,
+    current_price: number,
+    id: string,
+    symbol: string,
+    price_change_percentage_24h: number,
+    market_cap: number,
+    total_volume: number
 }
 
-const MarketInfo: React.FC = () => {
-  const [marketData, setMarketData] = useState<MarketData[]>([]);
-  const [assets, setAssets] = useState(['bitcoin','ethereum']); // Initial assets
-  const [inputValue, setInputValue] = useState(''); 
+const MarketInfo = () => {
+    const [cryptoData, setCryptoData] = useState<TopCoinObj[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [page, setPage] = useState<number>(1);
+    const [active, setActive] = useState<number>(1);
+    const [currency, setCurrency] = useState("usd");
+    // Fetching data
+    useEffect(() => {
+        const fetchCoins = async () => {
+            try {
+                const response = await axios.get(`https://api.coingecko.com/api/v3/coins/markets`, {
+                    params: {
+                        vs_currency: currency,
+                        order: 'market_cap_desc',
+                        per_page: 80,
+                        page: 1,
+                        sparkline: false
+                    }
+                });
+                setCryptoData(response.data);
+            } catch (error) {
+                console.error('Error fetching coins:', error);
+            }
+        };
+        
+        fetchCoins();
+    }, [currency]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const promises = assets.map(asset => fetchMarketData(asset));
-      try {
-        const responses = await Promise.all(promises);
-        console.log(responses);
-        const data = responses.map((response, index) => ({
-          name: assets[index],
-          price: response[assets[index]].usd,
-          volume: response[assets[index]].usd_24h_vol,
-          coinPercent: response[assets[index]].usd_24h_change,
-          mktCap: response[assets[index]].usd_market_cap,
-        }));
-        setMarketData(data);
-      } catch (error) {
-        console.error('Failed to fetch market data:', error);
-      }
-    };// Fetch data immediately and then every 5 minutes
-    fetchData();
-    const intervalId = setInterval(fetchData, 5 * 60 * 1000);
-
-    // Clean up the interval on unmount
-    return () => clearInterval(intervalId);
-  }, [assets]); // Re-run effect when assets change
-
-  const handleAddAsset = (asset: string) => {
-
-    if (assets.length >= 7) {
-      console.error('Maximum number of assets reached');
-      return;
-    }
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newSearchTerm = e.target.value.toLowerCase();
+        setSearchTerm(newSearchTerm);
     
-    const upperCaseAsset = asset.toUpperCase();
-    const isValid = /^[A-Z0-9]+$/.test(upperCaseAsset);
-  
-    if (isValid) {
-      setAssets(prevAssets => {
-        if (!prevAssets.includes(upperCaseAsset)) {
-          return [...prevAssets, upperCaseAsset];
-        } else {
-          console.error('Asset already exists:', upperCaseAsset);
-          return prevAssets;
+        // Only update the page if the search term has actually changed and we are not already on the first page.
+        if (newSearchTerm !== searchTerm && page !== 1) {
+            setPage(1);
+            setActive(1);
         }
-      });
-    } else {
-      console.error('Invalid asset name:', asset);
-    }
-  };
+    };
 
-  const handleRemoveAsset = (asset: string) => {
-    setAssets(prevAssets => prevAssets.filter(a => a !== asset));
-  };
+    const handlePageClick = (newPage:number) => {
+        // Prevent unnecessary state updates
+        if (page !== newPage) {
+            setPage(newPage);
+            setActive(newPage);
+        }
+    };
 
-  return (
-    <div style={{ display: 'grid', gap: '20px', gridTemplateColumns: 'repeat(4, 1fr)' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', backgroundColor: '#f8f8f8', padding: '20px', borderRadius: '10px' }}>
-        <input type="text" placeholder="Add asset" value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            handleAddAsset(inputValue);
-            setInputValue('');
-          }
-        }} style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }} />
-        <button style={{ backgroundColor: '#007BFF', color: 'white', border: 'none', padding: '10px', borderRadius: '5px', cursor: 'pointer' }} onClick={() => handleAddAsset(inputValue)}>Add</button>
-      </div>
-      {marketData.map((data) => (
-        <div key={data.name} style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '5px' }}>
-          <h4 style={{ marginBottom: '10px' }}>{data.name.toUpperCase()}</h4>
-          <p style={{ color: 'green', fontWeight: 'bold' }}>Price: {data.price.toFixed(2)} USD</p>
-          <p>Volume: {data.volume.toFixed(2)}</p>
-          <p>24h Change: {data.coinPercent.toFixed(2)}%</p>
-          <p>Market Cap: {data.mktCap.toFixed(2)}</p>
-          <button style={{ backgroundColor: '#f0f0f0', border: 'none', padding: '10px', borderRadius: '5px', cursor: 'pointer' }} onClick={() => handleRemoveAsset(data.name)}>Remove</button>
+    const filteredCryptoData = cryptoData.filter(coin =>
+        coin.id.toLowerCase().includes(searchTerm) ||
+        coin.symbol.toLowerCase().includes(searchTerm)
+    );
+
+    const pageCount = Math.ceil(filteredCryptoData.length / ITEMS_PER_PAGE);
+    const pageNumbers = Array.from({ length: pageCount }, (_, i) => i + 1);
+    const currentItems = filteredCryptoData.slice(
+        (page - 1) * ITEMS_PER_PAGE,
+        page * ITEMS_PER_PAGE
+      );
+
+      const paginationRange = (current: number, total: number): number[] => {
+        const range: number[] = [];
+        for (let i = Math.max(1, current - 1); i <= Math.min(current + 1, total); i++) {
+          range.push(i);
+        }
+        return range;
+      };
+
+    const displayRange = paginationRange(page, pageCount);
+
+    return (
+        <div>
+            {/* <Card> */}
+                <CardHeader>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px' }}>
+                    <CardTitle className="mr-4">Market</CardTitle>
+                        <Input
+                            type="text"
+                            placeholder="Search"
+                            value={searchTerm}
+                            onChange={handleSearch}
+                            // You might need to adjust the class or styling
+                        />
+                        {/* <FaSearch /> */}
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Coin</TableHead>
+                                <TableHead>Name</TableHead>
+                                <TableHead>Price</TableHead>
+                                <TableHead>24h %</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {currentItems.map((coin, index) => (
+                                <TableRow key={coin.id}>
+                                    <TableCell>
+                                    <img src={coin.image} 
+                                        alt={coin.symbol} 
+                                        style={{
+                                            width: '18px',
+                                            height: '18px',
+                                            borderRadius: '50%'
+                                        }} />
+                                    </TableCell>
+                                    <TableCell>{coin.symbol.toUpperCase()}</TableCell>
+                                    <TableCell>{currency === "usd" ? "$" : <BiRupee />} {coin.current_price.toLocaleString()}</TableCell>
+                                    <TableCell style={{ color: coin.price_change_percentage_24h > 0 ? 'green' : 'red' }}>
+                                        {coin.price_change_percentage_24h.toFixed(2)}%
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+                <Pagination style={{paddingBottom: '8px' }}>
+                    <PaginationContent>
+                        <PaginationItem>
+                        <PaginationPrevious
+                            onClick={() => handlePageClick(Math.max(page - 1, 1))}
+                            // disabled={page === 1}
+                        />
+                        </PaginationItem>
+                        {displayRange.map((item) => (
+                        <PaginationItem key={item}>
+                            <PaginationLink
+                            onClick={() => handlePageClick(item)}
+                            isActive={item === page}
+                            >
+                            {item}
+                            </PaginationLink>
+                        </PaginationItem>
+                        ))}
+                        <PaginationItem>
+                        <PaginationNext
+                            onClick={() => handlePageClick(Math.min(page + 1, pageCount))}
+                            // disabled={page === pageCount}
+                        />
+                        </PaginationItem>
+                    </PaginationContent>
+                    </Pagination>
+            {/* </Card> */}
         </div>
-      ))}
-    </div>
-  );
+    );
 };
+
 export default MarketInfo;

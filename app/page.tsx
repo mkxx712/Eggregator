@@ -94,7 +94,6 @@ export default async function DashboardPage() {
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="real-time">Real-Time</TabsTrigger>
-              <TabsTrigger value="market-info">Market-Place</TabsTrigger>
               <TabsTrigger value="readme">README</TabsTrigger>
             </TabsList>
             <ToastContainer />
@@ -245,15 +244,14 @@ export default async function DashboardPage() {
                 </script>
                 <ChartSelect /> 
                 <Card className="col-span-2">
-                  <CardHeader>
-                    <CardTitle>Related News</CardTitle>
+                  {/* <CardHeader>
+                  <CardTitle>Market</CardTitle> */}
+                    {/* <CardTitle>Market Data</CardTitle> */}
                     {/* <CardDescription>
                       Supported by CryptoPanic.
                     </CardDescription> */}
-                  </CardHeader>
-                  <CardContent>
-                    <News />
-                  </CardContent>
+                  {/* </CardHeader> */}
+                    <MarketInfo />
                 </Card>
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
@@ -266,16 +264,6 @@ export default async function DashboardPage() {
                   </CardContent>
                 </Card>
               </div>
-            </TabsContent>
-
-            <TabsContent value="market-info" className="space-y-4">
-              <CardHeader>
-                <CardTitle>Market Info</CardTitle>
-                <p style={{ fontSize: '0.8em', color: '#888' }}>Updates every 5 minutes</p>
-              </CardHeader>
-              <CardContent>
-                  <MarketInfo />
-              </CardContent>
             </TabsContent>
 
             <TabsContent value="readme" className="space-y-4">
