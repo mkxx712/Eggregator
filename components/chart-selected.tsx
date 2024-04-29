@@ -7,19 +7,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectValue, SelectTrigger, SelectContent, SelectItem, SelectGroup } from "./ui/select";
 import KChart from "./kchart";
 
-const ChartSelect = () => {
-  const [selectedAssets, setSelectedAssets] = useState<string[]>([]);
+const ChartSelect = ({ selectedAssets }: { selectedAssets: string[] }) => {
+  // const [selectedAssets, setSelectedAssets] = useState<string[]>(selectedAssets);
   const [selectedCoin, setSelectedCoin] = useState<string>("");
 
-  useEffect(() => {
-    // Try to find the <script> tag that contains the selectedAsset data.
-    const dataElement = document.getElementById("selectedAsset-data");
-    if (dataElement && dataElement.textContent) {
-      // Parsing JSON data and setting state
-      const data = JSON.parse(dataElement.textContent);
-      setSelectedAssets(data);
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Try to find the <script> tag that contains the selectedAsset data.
+  //   const dataElement = document.getElementById("selectedAsset-data");
+  //   if (dataElement && dataElement.textContent) {
+  //     // Parsing JSON data and setting state
+  //     const data = JSON.parse(dataElement.textContent);
+  //     setSelectedAssets(data);
+  //   }
+  // }, []);
 
   return (
     <Card className="col-span-5">

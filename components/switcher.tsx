@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 
 import { CaretSortIcon, CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
@@ -36,9 +34,17 @@ import "react-toastify/dist/ReactToastify.css";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>;
 
-interface EXSwitcherProps extends PopoverTriggerProps {}
+interface EXSwitcherProps extends PopoverTriggerProps {
+  selectedExchange: string; // Add selectedExchange prop
+  onExchangeChange: (selectedExchange: string) => void; // Add onExchangeChange prop
+}
 
-export default function EXSwitcher({ className }: EXSwitcherProps) {
+export default function EXSwitcher({
+  className,
+  selectedExchange,
+  onExchangeChange,
+  ...popoverTriggerProps
+}: EXSwitcherProps) {
   const [groups, setGroups] = React.useState([
     {
       label: "Total",
@@ -65,14 +71,14 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
           label: "Binance - Wilson",
           value: "Binance",
         },
-        {
-          label: "Coinbase - Wilson",
-          value: "Coinbase",
-        },
-        {
-          label: "OKX - Wilson",
-          value: "OKX",
-        },
+        // {
+        //   label: "Coinbase - Wilson",
+        //   value: "Coinbase",
+        // },
+        // {
+        //   label: "OKX - Wilson",
+        //   value: "OKX",
+        // },
       ],
     },
   ]);
@@ -85,7 +91,7 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
   const [selectedTeam, setSelectedTeam] = React.useState<EX>(defaut_switcher);
   const [api, setApi] = React.useState(""); // Add Status Maintenance API
   const [apiSecret, setApiSecret] = React.useState(""); // Add status maintenance API_SECRET
-  const [exchanges, setExchanges] = React.useState([]); // Specify the type of exchanges as an array of EX type objects
+  const [exchanges, setExchanges] = React.useState(""); // Specify the type of exchanges as an array of EX type objects
   const [portfolioName, setPortfolioName] = React.useState("");
   const [showAddressInput, setShowAddressInput] = React.useState(false); // Show the address input field when the user selects DEX/Wallet
 
@@ -145,12 +151,12 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
     setPortfolioName("");
   };
 
+  // For Import Exchange/Address
   const handleSelectChange = (selectedValue: string) => {
     setSelectedTeam({
       label: portfolioName || selectedValue, // Selected label name
       value: selectedValue, // Here we assume that label and value are the same
     });
-
     // When MetaMask is selected, the address input box is displayed.
     setShowAddressInput(selectedValue === "MetaMask");
   };
@@ -201,7 +207,7 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
             variant="outline"
             role="comb0xb9BC82DE634D0D0cC439e2f27ADB90B97c4Cb0d5obox"
             aria-expanded={open}
-            aria-label="Select"
+            aria-label="Select Exchange"
             className={cn("w-[200px] justify-between", className)}
           >
             <Avatar className="mr-2 h-5 w-5">
@@ -223,6 +229,7 @@ export default function EXSwitcher({ className }: EXSwitcherProps) {
                       key={team.value}
                       onSelect={() => {
                         setSelectedTeam(team);
+                        onExchangeChange(team.value);
                         setOpen(false);
                       }}
                     >

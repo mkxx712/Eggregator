@@ -1,0 +1,154 @@
+/* MarketInfo.module.css */
+.container {
+    font-family: var(--font-sans), sans-serif;
+    background-color: #ffffff;
+    color: #1a202c;
+    padding-top: 20px;
+  }
+  
+  .card {
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #dde2e8;
+    margin-bottom: 0.7rem;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 5px;
+  }
+  
+  .title {
+    font-family: var(--font-mono), monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    padding-right: 1.3rem;
+    padding-top: 0.6rem;
+
+  }
+  
+  .searchBar {
+    display: flex;
+    align-items: center;
+    padding: 0.2rem 0.2rem;
+  }
+  
+  .searchInput {
+    flex-grow: 1;
+    margin-right: 1rem;
+    padding: 0.2rem 0.1rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+  }
+  
+  .searchIcon {
+    color: #4a5568;
+    cursor: pointer;
+  }
+
+  .button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  
+  .button:hover {
+    background-color: #333;
+  }
+  
+  .coinImage {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    border-radius: 6px;
+  }
+  
+  .table th {
+    background-color: #ffffff;
+    color: #333;
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 0.35rem 0.35rem;
+    text-transform: uppercase;
+    border-color: #dde2e8;
+  }
+  
+  .table td {
+    color: #333;
+    padding: 0.25rem 0.25rem;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 450;
+    border-color: #dde2e8;
+    /* border-width: 0.2px; */
+    border-top: 1px solid #dde2e8;
+  }
+  
+  .table thead tr:first-child th:first-child {
+    border-top-left-radius: 6px;
+  }
+  
+  .table thead tr:first-child th:last-child {
+    border-top-right-radius: 6px;
+  }
+  
+  /* .table tbody tr:last-child td {
+    border-bottom: 2px solid #dde2e8; /* Same weight as header cells for last row */
+  /* } */
+
+  .table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 6px;
+  }
+  
+  .table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 6px;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+  }
+  
+  .pageButton {
+    background-color: #e2e2e2;
+    color: #333;
+    margin: 0 0.7rem;
+    padding: 0.05rem 0.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
+  
+  .pageButton.active {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .pageButton:hover {
+    background-color: #333;
+    color: #fff;
+  }
