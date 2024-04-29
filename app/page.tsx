@@ -330,6 +330,29 @@ export default async function DashboardPage() {
                       </div>
                     </HoverCardContent>
                   </HoverCard>
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <Button variant="link">@Haoran Wang</Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent className="w-80">
+                      <div className="flex justify-between space-x-4">
+                        <Avatar>
+                          <AvatarImage src="https://avatars.githubusercontent.com/u/55032546?s=64&v=4" />
+                          <AvatarFallback>HW</AvatarFallback>
+                        </Avatar>
+                        <div className="space-y-1">
+                          <h4 className="text-sm font-semibold">@Haoran Wang</h4>
+                          <p className="text-sm">FinTech@Duke. </p>
+                          <div className="flex items-center pt-2">
+                            <CookieIcon className="mr-2 h-4 w-4 opacity-70" />{" "}
+                            <span className="text-xs text-muted-foreground">
+                              henryw_99@outlook.com
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </HoverCardContent>
+                  </HoverCard>
                   </p>
 
                   <h4 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">
