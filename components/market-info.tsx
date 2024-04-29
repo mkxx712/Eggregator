@@ -20,7 +20,7 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {
     Pagination,
     PaginationContent,
@@ -29,7 +29,7 @@ import {
     PaginationPrevious,
     PaginationNext,
   } from "@/components/ui/pagination";
-import { CardHeader } from '@nextui-org/react';
+// import { CardHeader } from '@nextui-org/react';
 
 const ITEMS_PER_PAGE = 6;
 
@@ -117,16 +117,9 @@ const MarketInfo = () => {
     return (
         <div>
             {/* <Card> */}
-                <CardContent>
+                <CardHeader>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px' }}>
-                    <div style={{ 
-                        fontFamily: 'var(--font-mono), monospace', 
-                        fontSize: '1rem', 
-                        fontWeight: '600', 
-                        marginBottom: '0.6rem', 
-                        paddingRight: '1.3rem', 
-                        paddingTop: '0.6rem'
-                        }}> Market </div>
+                    <CardTitle className="mr-4">Market</CardTitle>
                         <Input
                             type="text"
                             placeholder="Search"
@@ -136,7 +129,7 @@ const MarketInfo = () => {
                         />
                         {/* <FaSearch /> */}
                     </div>
-                </CardContent>
+                </CardHeader>
                 <CardContent>
                     <Table>
                         <TableHeader>

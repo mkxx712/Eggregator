@@ -244,15 +244,14 @@ export default async function DashboardPage() {
                 </script>
                 <ChartSelect /> 
                 <Card className="col-span-2">
-                  {/* <CardHeader> */}
+                  {/* <CardHeader>
+                  <CardTitle>Market</CardTitle> */}
                     {/* <CardTitle>Market Data</CardTitle> */}
                     {/* <CardDescription>
                       Supported by CryptoPanic.
                     </CardDescription> */}
                   {/* </CardHeader> */}
-                  {/* <CardContent> */}
                     <MarketInfo />
-                  {/* </CardContent> */}
                 </Card>
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
