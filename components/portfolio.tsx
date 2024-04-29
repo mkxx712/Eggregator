@@ -140,9 +140,9 @@ export const columns: ColumnDef<Assets>[] = [
 ];
 
 interface AssetItemListProps {
-  portfolio: AssetItem[];
-  dexportfolio: DexItem[];
-  prices: number[];
+  portfolio?: AssetItem[];
+  dexportfolio?: DexItem[];
+  prices?: number[];
 }
 
 export function Portfolio({ portfolio, dexportfolio, prices }: AssetItemListProps) {
@@ -172,16 +172,16 @@ export function Portfolio({ portfolio, dexportfolio, prices }: AssetItemListProp
   // use useMemo to avoid re-rendering the table on every state change
   const combinedData = React.useMemo(
     () => [
-      ...portfolio
+      ...(portfolio ?? [])
         .filter((item: AssetItem) => Number(item.free) + Number(item.locked) > 0)
         .map((item: AssetItem, index: number) => ({
           asset: item.asset,
           amount: parseFloat(formatPrice(Number(item.free) + Number(item.locked))),
-          price: parseFloat(formatPrice(prices[index])), // Use the corresponding fetched price
-          total: parseFloat(formatPrice((Number(item.free) + Number(item.locked)) * prices[index])),
+          price: parseFloat(formatPrice(prices?.[index] ?? 0)), // Use the corresponding fetched price
+          total: parseFloat(formatPrice((Number(item.free) + Number(item.locked)) * (prices?.[index] ?? 0))),
           at: "Binance.US",
         })),
-      ...dexportfolio
+      ...(dexportfolio ?? [])
         .filter((item: DexItem) => Number(item.amount) > 0)
         .map((item: DexItem, index: number) => ({
           asset: item.symbol,
