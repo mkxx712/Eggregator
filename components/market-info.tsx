@@ -8,7 +8,6 @@ import { BiRupee } from "react-icons/bi";
 import { FiTrendingUp, FiTrendingDown } from "react-icons/fi";
 import { HiOutlineArrowsUpDown } from "react-icons/hi2";
 import Link from 'next/link';
-import styles from '../styles/MarketInfo.module.css';
 
 import {
     Table,
@@ -120,7 +119,14 @@ const MarketInfo = () => {
             {/* <Card> */}
                 <CardContent>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px' }}>
-                    <div className={styles.title}>Market</div>
+                    <div style={{ 
+                        fontFamily: 'var(--font-mono), monospace', 
+                        fontSize: '1rem', 
+                        fontWeight: '600', 
+                        marginBottom: '0.6rem', 
+                        paddingRight: '1.3rem', 
+                        paddingTop: '0.6rem'
+                        }}> Market </div>
                         <Input
                             type="text"
                             placeholder="Search"
@@ -145,7 +151,13 @@ const MarketInfo = () => {
                             {currentItems.map((coin, index) => (
                                 <TableRow key={coin.id}>
                                     <TableCell>
-                                        <img src={coin.image} alt={coin.symbol} className={styles.coinImage} />
+                                    <img src={coin.image} 
+                                        alt={coin.symbol} 
+                                        style={{
+                                            width: '18px',
+                                            height: '18px',
+                                            borderRadius: '50%'
+                                        }} />
                                     </TableCell>
                                     <TableCell>{coin.symbol.toUpperCase()}</TableCell>
                                     <TableCell>{currency === "usd" ? "$" : <BiRupee />} {coin.current_price.toLocaleString()}</TableCell>
