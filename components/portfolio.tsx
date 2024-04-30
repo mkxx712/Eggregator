@@ -188,7 +188,7 @@ export function Portfolio({ portfolio, dexportfolio, prices }: AssetItemListProp
           amount: parseFloat(formatPrice(Number(item.amount))),
           price: parseFloat(formatPrice(Number(item.tokenPrice))), // Use the corresponding fetched price
           total: parseFloat(formatPrice(Number(item.amount) * Number(item.tokenPrice))),
-          at: "MetaMask",
+          at: "Ethereum",
         })),
     ],
     [portfolio, dexportfolio, prices],
