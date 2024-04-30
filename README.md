@@ -1,13 +1,13 @@
 # <img src="https://imgur.com/vtjp3tz.png" width="30" height="30"> Eggregator
+
 An open-source crypto aggregator, designed for traders to manage their portfolio.
 
 ![image](https://github.com/mkxx712/Eggregator/assets/75213287/feb8978c-ed53-413a-b2d8-a96c747899b5)
 
-<img width="1290" alt="image" src="https://github.com/mkxx712/Eggregator/assets/75213287/fd81dd2a-7ce3-49e2-b702-975a027abafe">
-<img width="1290" alt="image" src="https://github.com/mkxx712/Eggregator/assets/75213287/5cabce41-821f-4bfa-9481-d3ff2d853667">
-<img width="1290" alt="image" src="https://github.com/mkxx712/Eggregator/assets/75213287/4365bc4f-3535-49b1-808b-417528c52445">
-<img width="1290" alt="image" src="https://github.com/mkxx712/Eggregator/assets/75213287/30e037d8-b3b9-4938-845c-aa40d8214fce">
-
+<img width="1303" alt="Untitled" src="https://github.com/smilewilson1999/Eggregator/assets/75213287/7ec68d75-006d-4382-84e6-3b090e87467e">
+<img width="1303" alt="Untitled" src="https://github.com/smilewilson1999/Eggregator/assets/75213287/2bc5b6f5-5af7-4c2c-91e9-44a1ff5c0e7a">
+<img width="1303" alt="Untitled" src="https://github.com/smilewilson1999/Eggregator/assets/75213287/e53cf349-d4ea-448b-89ae-af7f1db12733">
+<img width="1303" alt="Untitled" src="https://github.com/smilewilson1999/Eggregator/assets/75213287/a7548569-c572-4d29-a4f5-95d1a93e8b15">
 
 ## Getting Started
 
@@ -22,4 +22,5 @@ pnpm dev
 # or
 bun dev
 ```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

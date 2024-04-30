@@ -1,6 +1,6 @@
-// utils/fetchAndSetData.ts
-import axios from 'axios';
-import { Time } from 'lightweight-charts';
+import axios from "axios";
+import { Time } from "lightweight-charts";
+import { Kumar_One_Outline } from "next/font/google";
 
 interface KlineData {
   time: Time;
@@ -10,22 +10,23 @@ interface KlineData {
   close: number;
 }
 
-export async function fetchAndSetData(assets: string[] | string, setData: (data: KlineData[], asset: string) => void): Promise<void> {
-  
+export async function fetchAndSetData(
+  assets: string[] | string,
+  setData: (data: KlineData[], asset: string) => void,
+): Promise<void> {
   const assetList = Array.isArray(assets) ? assets : [assets];
 
-  for (const asset of assetList) {
-
-    if (!asset) continue; // avoid empty strings
+  const fetchPromises = assetList.map(async asset => {
+    if (!asset) return; // avoid empty strings and undefined
 
     try {
       const response = await axios.get(`https://api.binance.us/api/v3/klines`, {
         headers: {
-          'Accept-Language': 'en',
+          "Accept-Language": "en",
         },
         params: {
           symbol: `${asset}USDT`,
-          interval: '4h',
+          interval: "4h",
           limit: 1000,
         },
       });
@@ -38,8 +39,12 @@ export async function fetchAndSetData(assets: string[] | string, setData: (data:
       }));
 
       setData(data, asset);
+      // console.log(`${asset}data fetch successfully`);
     } catch (error) {
       console.error("Error fetching data for asset: ", asset, error);
+      throw error;
     }
-  }
+  });
+
+  await Promise.all(fetchPromises);
 }
